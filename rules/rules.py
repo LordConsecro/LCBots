@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from cogs.utils.chat_formatting import box
 
 class Rules:
 
