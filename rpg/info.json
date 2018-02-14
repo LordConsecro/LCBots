@@ -1,7 +1,7 @@
 {
     "AUTHOR" : "Consecro",
     "INSTALL_MSG" : "Installed RPG",
-    "NAME" : "RPG",
+    "NAME" : "rpg",
     "SHORT" : "Port of the original text adventure game",
     "DESCRIPTION" : "WARNING: Cog is in beta."
 }

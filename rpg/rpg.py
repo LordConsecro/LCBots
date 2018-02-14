@@ -7,8 +7,6 @@ from __main__ import send_cmd_help
 from cogs.utils.dataIO import fileIO
 import shutil
 from random import choice
-
-# __init__.py
 """The Adventure game.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
