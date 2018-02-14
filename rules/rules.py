@@ -10,7 +10,6 @@ class Rules:
     @commands.command(name="rules", aliases=["RULES", "Rules"])
     async def rules(self):
 
-        #Your code will go here
         msg = "RULE 1: Don't advertise any other mods. It's annoying to brag about other mod creators.\n\n"
         msg += "RULE 2: Do NOT mass mention Lord Consecro or any staff member. You will receive a mute.\n\n"
         msg += "RULE 3: Be respectful to staff member and supporters. Listen to them and follow their rules.\n\n"
