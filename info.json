@@ -1,5 +1,6 @@
-{"NAME": "LC Plugins",
+{"NAME": "LC-Plugins",
 "AUTHOR" : "Consecro",
 "SHORT": "LC Discord Plugins",
+"DISABLED" : false,
 "DESCRIPTION" : "Message from Consecro:\n\nHave Fun!"
 }
