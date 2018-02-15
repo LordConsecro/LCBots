@@ -102,20 +102,23 @@ class RPG:
                 userinfo["chop_block"] = 0
                 userinfo["mine_block"] = 0
                 userinfo["in_party"] = []
+				userinfo["thirst"] = 0
+				userinfo["hunger"] = 0
+				userinfo["tiredness"] = 0
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 await self.bot.say("{}, you have been reset! Please use `!rpg start` again.".format(userinfo["name"]))
                 return
             elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
-                await self.bot.say("Ok then")
+                await self.bot.say("Okay then")
                 return
 
         await self.bot.say("Hello {}".format(user.name))
         await asyncio.sleep(2)
         await self.bot.say("Welcome to LC Dungeons!\n\nMay I ask what race you are?\n`Choose one`\nOrc\nHuman\nElf")
 
-        answer1 = await self.check_answer(ctx, ["orc", "human", "elf", ">start"])
+        answer1 = await self.check_answer(ctx, ["orc", "human", "elf", "!rpg start"])
 
-        if answer1 == ">start":
+        if answer1 == "!rpg start":
             pass
         elif answer1 == "orc" or answer1 == "Orc":
             userinfo["race"] = "Orc"
