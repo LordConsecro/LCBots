@@ -59,23 +59,26 @@ class RPG:
             channel = ctx.message.channel
             server = channel.server
             user = ctx.message.author
+            userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
             
             #we need more of an into here
             intro_list = []
-            intro_list.append("1: New Character")
-            intro_list.append("2: Reset Character")
+            if userinfo["class"] == "None" and userinfo["race"] == "None":
+                intro_list.append("1: New Character")
+            elif not userinfo["class"] == "None" and not userinfo["race"] == "None":
+                intro_list.append("1: Reset Character")
             
             em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- Choose an option\n+{}```".format(user.name, "\n+".join(intro_list)), color=discord.Color.blue())
             await self.bot.say(embed=em)
+            
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
             if answer0 == "!rpg":
                 return
                 
-            elif answer0 == "1" or answer0 == "2":
+            elif answer0 == "1":
             
                 await self._create_user(user, server)
-                userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
 
                 if not userinfo["class"] == "None" and not userinfo["race"] == "None":
                     await self.bot.reply("Are you sure you want to restart?")
