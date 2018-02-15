@@ -48,12 +48,12 @@ class RPG:
         else:
             return await self.check_answer(ctx, valid_options)
 
-	@commands.group(pass_context = True)
+    @commands.group(pass_context = True)
     async def rpg(self, ctx):
-		if ctx.invoked_subcommand is None:
+        if ctx.invoked_subcommand is None:
             await bot.say("What would you like to do?")
             return
-			
+            
     @rpg.command (pass_context = True)
     async def start(self, ctx):
         channel = ctx.message.channel
