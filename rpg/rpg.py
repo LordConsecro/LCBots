@@ -63,9 +63,9 @@ class RPG:
             
             #we need more of an into here
             intro_list = []
-            if userinfo["class"] == "None" and userinfo["race"] == "None":
+            if userinfo["race"] == "None":
                 intro_list.append("1: New Character")
-            elif not userinfo["class"] == "None" and not userinfo["race"] == "None":
+            elif not userinfo["race"] == "None":
                 intro_list.append("1: Reset Character")
             
             em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- Choose an option\n+ {}```".format(user.name, "\n+ ".join(intro_list)), color=discord.Color.blue())
