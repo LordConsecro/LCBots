@@ -61,7 +61,7 @@ class RPG:
             intro = "\n"
             intro += ("Welcome <@{}>\n".format(user.id))
             intro += "!rpg start - starts or resets game\n"
-            intro = "\n"
+            intro += "\n"
             
             await self.bot.say(intro)
             return
