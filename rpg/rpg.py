@@ -55,14 +55,13 @@ class RPG:
     #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
-        user = ctx.message.author
         if ctx.invoked_subcommand is None:
+            user = ctx.message.author
             #we need more of an into here
-            intro = []
-            intro.append("!rpg start - starts or resets game\n")
+            intro = ("Welcome <@{}>\n".format(user.id))
+            intro += "!rpg start - starts or resets game\n"
             
-            em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(intro))), color=discord.Color.blue())
-            await self.bot.say(embed=em)
+            await self.bot.say(intro)
             return
            
     #see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
