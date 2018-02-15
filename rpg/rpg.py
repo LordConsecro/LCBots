@@ -61,6 +61,7 @@ class RPG:
             user = ctx.message.author
             
             #we need more of an into here
+            intro_list = []
             intro_list.append("1: New Character")
             intro_list.append("2: Reset Character")
             
