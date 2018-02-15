@@ -2221,7 +2221,7 @@ class NoGameRunning(Exception):
 class NoTeamMembers(Exception):
     pass
 
-class rpg:
+class RPG:
     """The original Text RPG game.
     
     Get a team together and embark on the first rpg together!
@@ -2234,7 +2234,7 @@ class rpg:
         self.players = {}
         self.teams = fileIO('data/rpg/teams.json', 'load')
 
-        self.game = {} # temp for testing
+        self.game = {}
 
     @commands.group(pass_context=True, aliases=['campsite'], no_pm=True)
     async def rpg(self, ctx):
@@ -3023,7 +3023,7 @@ def check_files():
 def setup(bot):
     check_folders()
     check_files()
-    n = rpg(bot)
+    n = RPG(bot)
     bot.add_cog(n)
 
 
