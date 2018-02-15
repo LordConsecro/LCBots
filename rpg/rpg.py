@@ -61,7 +61,7 @@ class RPG:
             user = ctx.message.author
             
             #we need more of an into here
-            intro_list.append("1: Start Adventure")
+            intro_list.append("1: New Character")
             intro_list.append("2: Reset Character")
             
             em = discord.Embed(description="<@{}> ```diff\n+ Welcome to LC Dungeons!\n\n- Choose an option\n+ {}```".format(user.id, "\n+".join(intro_list)), color=discord.Color.blue())
