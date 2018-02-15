@@ -123,56 +123,64 @@ class RPG:
                         
                 
                 race_list = []
-                race_list.append("Human")
-                race_list.append("Orc")
-                race_list.append("Elf")
+                race_list.append("1: Human")
+                race_list.append("2: Orc")
+                race_list.append("3: Elf")
                 
                 em = discord.Embed(description="```diff\n==[{}]==\nWhat is your race?\n+{}```".format(user.name, "\n+".join(race_list)), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
-                answer1 = await self.check_answer(ctx, ["human", "orc", "elf", "!rpg"])
+                answer1 = await self.check_answer(ctx, ["1", "human", "2", "orc", "3", "elf", "!rpg"])
 
                 if answer1 == "!rpg":
                     pass
-                elif answer1 == "orc" or answer1 == "Orc":
-                    userinfo["race"] = "Orc"
-                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-                elif answer1 == "human" or answer1 == "Human":
+                elif answer1 == "1" or answer1 == "human":
                     userinfo["race"] = "Human"
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-                elif answer1 == "elf" or answer1 == "Elf":
+                elif answer1 == "2" or answer1 == "orc":
+                    userinfo["race"] = "Orc"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                elif answer1 == "3" or answer1 == "elf":
                     userinfo["race"] = "Elf"
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-                await self.bot.reply("Great!\nWhat Class are you?\n`Choose one`\nArcher\nPaladin\nMage\nThief")
+                    
+                class_list = []
+                class_list.append("1: Ranger")
+                class_list.append("2: Paladin")
+                class_list.append("3: Mage")
+                class_list.append("4: Thief")
+                
+                em = discord.Embed(description="```diff\n==[{}]==\nWhat is your class?\n+{}```".format(user.name, "\n+".join(class_list)), color=discord.Color.blue())
+                await self.bot.say(embed=em)
 
-                answer2 = await self.check_answer(ctx, ["archer", "paladin", "mage", "thief", "!rpg start"])
+                answer2 = await self.check_answer(ctx, ["1", "ranger", "2", "paladin", "3", "mage", "4", "thief", "!rpg"])
 
                 if answer2 == "!rpg":
                     return
 
-                elif answer2 == "archer" or answer2 == "Archer":
-                    userinfo["class"] = "Archer"
+                elif answer2 == "1" or answer2 == "ranger":
+                    userinfo["class"] = "Ranger"
                     userinfo["skills_learned"].append("Shoot")
                     userinfo["equip"] = "Simple Bow"
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                     await self.bot.say("Great, enjoy your stay!")
                     return
-                elif answer2 == "paladin" or answer2 == "Paladin":
+                elif answer2 == "2" or answer2 == "paladin":
                     userinfo["class"] = "Paladin"
                     userinfo["skills_learned"].append("Swing")
                     userinfo["equip"] = "Simple Sword"
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                     await self.bot.say("Great, enjoy your stay!")
                     return
-                elif answer2 == "mage" or answer2 == "Mage":
+                elif answer2 == "3" or answer2 == "mage":
                     userinfo["class"] = "Mage"
                     userinfo["skills_learned"].append("Cast")
                     userinfo["equip"] = "Simple Staff"
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                     await self.bot.say("Great, enjoy your stay!")
                     return
-                elif answer2 == "thief" or answer2 == "Thief":
+                elif answer2 == "4" or answer2 == "thief":
                     userinfo["class"] = "Thief"
                     userinfo["skills_learned"].append("Stab")
                     userinfo["equip"] = "Simple Dagger"
