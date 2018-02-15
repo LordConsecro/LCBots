@@ -20,9 +20,7 @@ except:
     pass
 
 #this fetches our prefix for the server
-#prefix = fileIO("data/red/settings.json", "load")['PREFIXES']
-
-rpgBot = Bot(command_prefix = "!")
+prefix = fileIO("data/red/settings.json", "load")['PREFIXES']
 
 #this is just a dev ID 
 dev = ["312127693242236928"]
@@ -55,11 +53,11 @@ class RPG:
         else:
             return await self.check_answer(ctx, valid_options)
         
-    @rpgBot.event
-    async def on_message(message):
+
+    async def on_message(self, message):
         if message.content.startswith('!rpg'):
-            await rpgBot.delete_message(message)
-        await rpgBot.process_commands(message)
+            await self.bot.delete_message(message)
+        await self.bot.process_commands(message)
 
     #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
