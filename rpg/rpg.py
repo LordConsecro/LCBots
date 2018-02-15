@@ -59,7 +59,7 @@ class RPG:
             await send_cmd_help(ctx)
             return
             
-	# this is the main menu
+    # this is the main menu
     @rpg.command(pass_context = True)
     async def menu(self, ctx):
         channel = ctx.message.channel
@@ -910,9 +910,9 @@ class RPG:
                 "dungeon_enemy": "None",
                 "duneon_enemy_hp": 0,
                 "in_party": [],
-				"thirst": 0,
-				"hunger": 0,
-				"tiredness": 0
+                "thirst": 0,
+                "hunger": 0,
+                "tiredness": 0
             }
             fileIO("data/rpg/players/{}/info.json".format(user.id), "save", new_account)
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
