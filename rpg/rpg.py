@@ -14,10 +14,6 @@ Apache License, Version 2.0 as detailed in the accompanying README.txt.
 
 """
 def load_advent_dat(data):
-    # import os
-    #from .data import parse
-
-    # datapath = os.path.join(os.path.dirname(__file__), 'data/rpg/advent.dat')
     datapath = 'data/rpg/advent.dat'
 
     with open(datapath, 'r', encoding='ascii') as datafile:
@@ -32,9 +28,6 @@ def play(seed=None):
     """
     global _game
 
-    #from .game import Game
-    #from .prompt import install_words
-
     _game = Game(seed)
     load_advent_dat(_game)
     install_words(_game)
@@ -44,18 +37,11 @@ def play(seed=None):
 def resume(savefile, quiet=False):
     global _game
 
-    #from .game import Game
-    #from .prompt import install_words
-
     _game = Game.resume(savefile)
     install_words(_game)
     if not quiet:
         print('GAME RESTORED\n')
 
-
-
-
-#data.py
 """Parse the original PDP ``advent.dat`` file.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
@@ -63,10 +49,6 @@ Apache License, Version 2.0 as detailed in the accompanying README.txt.
 
 """
 from operator import attrgetter
-#from .model import Hint, Message, Move, Object, Room, Word
-
-# The rpg data file knows only the first five characters of each
-# word in the game, so we have to know the full verion of each word.
 
 long_words = { w[:5]: w for w in """upstream downstream forest
 forward continue onward return retreat valley staircase outside building stream
@@ -97,7 +79,6 @@ class Data(object):
         if word.kind == 'noun':
             return self.objects[word.n % 1000]
 
-# Helper functions.
 
 def make_object(dictionary, klass, n):
     if n not in dictionary:
@@ -115,8 +96,6 @@ def expand_tabs(segments):
 
 def accumulate_message(dictionary, n, line):
     dictionary[n] = dictionary.get(n, '') + line + '\n'
-
-# Knowledge of what each section contains.
 
 def section1(data, n, *etc):
     room = make_object(data.rooms, Room, n)
@@ -255,11 +234,9 @@ def section11(data, n, turns_needed, penalty, question_n, message_n):
 def section12(data, n, line):
     accumulate_message(data.magic_messages, n, line)
 
-# Process every section of the file in turn.
-
 def parse(data, datafile):
     """Read the rpg data file and return a ``Data`` object."""
-    data._last_travel = [0, [0]]  # x and verbs used by section 3
+    data._last_travel = [0, [0]]
 
     while True:
         section_number = int(datafile.readline())
@@ -277,7 +254,6 @@ def parse(data, datafile):
     del data._object       # state used by section 5
 
     data.object_list = sorted(set(data.objects.values()), key=attrgetter('n'))
-    #data.room_list = sorted(set(data.rooms.values()), key=attrgetter('n'))
     for obj in data.object_list:
         name = obj.names[0]
         if hasattr(data, name):
@@ -286,29 +262,16 @@ def parse(data, datafile):
 
     return data
 
-
-
-
-#game.py
 """How we keep track of the state of the game.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
 Apache License, Version 2.0 as detailed in the accompanying README.txt.
 
 """
-# Numeric comments scattered through this file refer to FORTRAN line
-# numbers, for those comparing this file and `advent.for`; so "#2012"
-# refers to FORTRAN line number 2012 (which you can find easily in the
-# FORTRAN using Emacs with an interactive search for newline-2012-tab,
-# that is typed C-s C-q C-j 2 0 1 2 C-i).
 
-# import os
 import pickle
 import random
 import zlib
-# from operator import attrgetter
-#from .data import Data
-#from .model import Room, Message, Dwarf, Pirate
 
 YESNO_ANSWERS = {'y': True, 'yes': True, 'n': False, 'no': False}
 
@@ -405,19 +368,12 @@ class Game(Data):
     def is_finished(self):
         return (self.is_dead or self.is_done) and not self.yesno_callback
 
-    # Game startup
-
     def start(self):
         """Start the game."""
-
-        # For old-fashioned players, accept five-letter truncations like
-        # "inven" instead of insisting on full words like "inventory".
 
         for key, value in list(self.vocabulary.items()):
             if isinstance(key, str) and len(key) > 5:
                 self.vocabulary[key[:5]] = value
-
-        # Set things going.
 
         self.chest_room = self.rooms[114]
         self.bottle.contents = self.water
@@ -440,11 +396,6 @@ class Game(Data):
             treasure.prop = -1
 
         self.describe_location()
-
-    # Routines that handle the aftermath of "big" actions like movement.
-    # Although these are called at the end of each `do_command()` cycle,
-    # we place here at the top of `game.py` to mirror the order in the
-    # advent.for file.
 
     def move_to(self, newloc=None):  #2
         loc = self.loc
@@ -511,11 +462,7 @@ class Game(Data):
                           if dwarf.can_move(move)
                           and move.action is not dwarf.old_room
                           and move.action is not dwarf.room }
-            # Without stabilizing the order with a sort, the room chosen
-            # would depend on how the Room addresses in memory happen to
-            # order the rooms in the set() - and make it impossible to
-            # test the game by setting the random number generator seed
-            # and then playing through the game.
+
             locations = sorted(locations, key=attrgetter('n'))
             if locations:
                 new_room = self.choice(locations)
@@ -582,8 +529,6 @@ class Game(Data):
                 #6024
                 pirate.old_room = pirate.room = self.chest_room
                 pirate.has_seen_rpgr = False  # free to move
-
-        # Report what has happened.
 
         if dwarf_count == 1:
             self.write_message(4)
@@ -676,10 +621,6 @@ class Game(Data):
         self.write_message(54)
         self.finish_turn()
 
-    #2009 sets SPK="OK" then...
-    #2010 sets SPK to K
-    #2011 speaks SPK then...
-    #2012 blanks VERB and OBJ and calls:
     def finish_turn(self, obj=None):  #2600
 
         # Advance random number generator so each input affects future.
@@ -720,11 +661,7 @@ class Game(Data):
         if self.knife_location and self.knife_location is not self.loc:
             self.knife_location = None
 
-    # The central do_command() method, that should be called over and
-    # over again with words supplied by the user.
 
-    # edited - irdumbs
-    # def do_command(self, words):
     def do_command(self, words, ctx, rpg):
         """Parse and act upon the command in the list of strings `words`."""
         self.output = ''
@@ -732,8 +669,6 @@ class Game(Data):
         self._do_command(words, ctx, rpg)
         return self.output
 
-    #edited - irdumbs
-    # def _do_command(self, words):
     def _do_command(self, words, ctx, rpg):
         if self.yesno_callback is not None:
             answer = YESNO_ANSWERS.get(words[0], None)
@@ -803,19 +738,13 @@ class Game(Data):
         # self.dispatch_command(words)
         self.dispatch_command(words, ctx, rpg)
 
-    # edited - irdumbs
-    # def dispatch_command(self, words):  #19999
     def dispatch_command(self, words, ctx, rpg):  #19999
 
         if not 1 <= len(words) <= 2:
             return self.dont_understand()
 
-        #edited - irdumb
         if words[0] == 'save' and len(words) <= 2:
-            # Handle suspend separately, since filename can be anything,
-            # and is not restricted to being a vocabulary word (and, in
-            # fact, it can be an open file).
-            # return self.t_suspend(words[0], words[1])
+
             server = ctx.message.server
             channel = ctx.message.channel
             author = ctx.message.author
@@ -1082,8 +1011,6 @@ class Game(Data):
             self.write_message(12)
         self.move_to()
         return
-
-    # Death and reincarnation.
 
     def die_here(self):  #90
         self.write_message(23)
@@ -2273,7 +2200,6 @@ import re
 
 BAUD = 1200
 
-# added - irdumbs
 max_char_per_page = 1980
 save_path = 'data/rpg/saves/'
 
@@ -2306,9 +2232,6 @@ class rpg:
         self.game_loops = {}
         self.saves = {}
         self.players = {}
-        # serv_li = os.listdir(save_path)
-        # for sv in serv_li:
-        #     self.saves[sv] = os.listdir(save_path + sv)
         self.teams = fileIO('data/rpg/teams.json', 'load')
 
         self.game = {} # temp for testing
@@ -2347,8 +2270,6 @@ class rpg:
 
         msg = author.mention
 
-        # TODO: put all team stuff in own functions
-        # update teams.json
         first = False # lazy
         if server.id not in self.teams:
             self.teams[server.id] = {"TEAMS" : {}, "MEMBERS" : {}}
@@ -2411,14 +2332,7 @@ class rpg:
                             del self.game_loops[server.id][curteam][channel.id]
                 except:
                     pass
-        # forgot to cinfirm if overwriting current game. will have to fix up earlier also. !load also. maybe do like audio
 
-        # else:
-        #     if player not in team:
-        #         reply you haven't joined up with the team yet 
-
-
-        # update players
         if server.id not in self.players:
             self.players[server.id] = {}
         if channel.id not in self.players[server.id]:
@@ -2507,7 +2421,6 @@ class rpg:
         self.players[server.id][channel.id][author.id] = team
         phrases = ['catches up with the rest of the {} team','finally joins the {} team on their rpg','gets reunited with the {} team!','joins in the {} team\'s rpg!']
         await self.bot.say(author.mention+' '+choice(phrases).format(tname))
-
 
     @rpg.command(pass_context=True, name='quit')
     async def _quit(self, ctx):
@@ -2631,7 +2544,6 @@ class rpg:
 
     @team_list.command(pass_context=True, name='saves')
     async def team_saves(self, ctx, team=None):
-        # TeamNebNeb didn't show saves also !advernture embark didn't load save
         author = ctx.message.author
         server = ctx.message.server
         channel = ctx.message.channel
@@ -2667,8 +2579,6 @@ class rpg:
             print(e)
             await self.bot.reply('The {} team does not have any saves'.format(tname))
 
-
-    # only leaders can recruit?
     @team.command(pass_context=True)
     async def recruit(self, ctx, user: discord.Member, team=None):
         author = ctx.message.author
@@ -3109,8 +3019,6 @@ def check_files():
                         print(
                             "Adding " + str(key) + " field to rpg {}".format(file))
                 fileIO(base_path + file, "save", current)
-        
-
 
 def setup(bot):
     check_folders()
