@@ -65,7 +65,7 @@ class RPG:
             intro_list.append("1: New Character")
             intro_list.append("2: Reset Character")
             
-            em = discord.Embed(description="<@{}> ```diff\n+ Welcome to LC Dungeons!\n\n- Choose an option\n+ {}```".format(user.id, "\n+".join(intro_list)), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ Welcome {}!\n\n- Choose an option\n+{}```".format(user.id, "\n+".join(intro_list)), color=discord.Color.blue())
             await self.bot.say(embed=em)
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
