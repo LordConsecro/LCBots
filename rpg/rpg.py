@@ -72,16 +72,16 @@ class RPG:
             if answer0 == "!rpg":
                 return
                 
-            elif answer1 == "1" or answer1 == "2":
+            elif answer0 == "1" or answer0 == "2":
             
                 await self._create_user(user, server)
                 userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
 
                 if not userinfo["class"] == "None" and not userinfo["race"] == "None":
                     await self.bot.reply("Are you sure you want to restart?")
-                    answer1 = await self.check_answer(ctx, ["yes", "no", "n", "y", "!rpg start"])
+                    answer1 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
-                    if answer1 == "!rpg start":
+                    if answer1 == "!rpg":
                         pass
                     elif answer1 == "y" or answer1 == "Y" or answer1 == "yes" or answer1 == "Yes":
                         userinfo["gold"] = 0
@@ -117,8 +117,8 @@ class RPG:
                         fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                         await self.bot.say("{}, you have been reset! Please use `!rpg` again.".format(userinfo["name"]))
                         return
-                    elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
-                        await self.bot.say("No reset done")
+                    elif answer0 == "n" or answer0 == "N" or answer0 == "no" or answer0 == "No":
+                        await self.bot.say("Restart Canceled")
                         return
 
                 await self.bot.say("Welcome to LC Dungeons {}!\n\nMay I ask what race you are?\n`Choose one`\nOrc\nHuman\nElf".format(user.name))
@@ -141,7 +141,7 @@ class RPG:
 
                 answer2 = await self.check_answer(ctx, ["archer", "paladin", "mage", "thief", "!rpg start"])
 
-                if answer2 == "!rpg start":
+                if answer2 == "!rpg":
                     return
 
                 elif answer2 == "archer" or answer2 == "Archer":
