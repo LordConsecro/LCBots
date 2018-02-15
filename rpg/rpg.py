@@ -65,7 +65,7 @@ class RPG:
             intro_list.append("1: New Character")
             intro_list.append("2: Reset Character")
             
-            em = discord.Embed(description="Welcome <@{}>!```diff\n- Choose an option\n+{}```".format(user.id, "\n+".join(intro_list)), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+{}, welcome to LC Dungeons!\n- Choose an option\n+{}```".format(user.name, "\n+".join(intro_list)), color=discord.Color.blue())
             await self.bot.say(embed=em)
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
@@ -120,10 +120,17 @@ class RPG:
                     elif answer0 == "n" or answer0 == "N" or answer0 == "no" or answer0 == "No":
                         await self.bot.say("Restart Canceled")
                         return
+                        
+                
+                race_list = []
+                race_list.append("Human")
+                race_list.append("Orc")
+                race_list.append("Elf")
+                
+                em = discord.Embed(description="```diff\n==[{}]==\nWhat is your race?\n+{}```".format(user.name, "\n+".join(race_list)), color=discord.Color.blue())
+                await self.bot.say(embed=em)
 
-                await self.bot.say("Welcome to LC Dungeons {}!\n\nMay I ask what race you are?\n`Choose one`\nOrc\nHuman\nElf".format(user.name))
-
-                answer1 = await self.check_answer(ctx, ["orc", "human", "elf", "!rpg"])
+                answer1 = await self.check_answer(ctx, ["human", "orc", "elf", "!rpg"])
 
                 if answer1 == "!rpg":
                     pass
