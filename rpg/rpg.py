@@ -51,7 +51,7 @@ class RPG:
     @commands.group(pass_context = True)
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
-            await bot.say("What would you like to do?")
+            await self.bot.say("What command would you like to do?")
             return
             
     @rpg.command (pass_context = True)
@@ -105,9 +105,9 @@ class RPG:
 
         await self.bot.say("Hello {}".format(user.name))
         await asyncio.sleep(2)
-        await self.bot.say("Welcome to Discord Dungeons!\n\nMay i ask what race you are?\n`Choose one`\nOrc\nHuman\nTenti")
+        await self.bot.say("Welcome to LC Dungeons!\n\nMay I ask what race you are?\n`Choose one`\nOrc\nHuman\nElf")
 
-        answer1 = await self.check_answer(ctx, ["orc", "human", "tenti", ">start"])
+        answer1 = await self.check_answer(ctx, ["orc", "human", "elf", ">start"])
 
         if answer1 == ">start":
             pass
@@ -117,8 +117,8 @@ class RPG:
         elif answer1 == "human" or answer1 == "Human":
             userinfo["race"] = "Human"
             fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-        elif answer1 == "tenti" or answer1 == "Tenti":
-            userinfo["race"] = "Tenti"
+        elif answer1 == "elf" or answer1 == "Elf":
+            userinfo["race"] = "Elf"
             fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
         await self.bot.reply("Great!\nWhat Class are you?\n`Choose one`\nArcher\nPaladin\nMage\nThief")
@@ -170,11 +170,11 @@ class RPG:
             return
 
         if userinfo["location"] == "Golden Temple":
-            monsterlist = ["Rachi", "Debin", "Oofer"]
+            monsterlist = ["Holy Priest", "Forgotten Spirit", "Unholy Saint"]
         elif userinfo["location"] == "The Forest":
             monsterlist = ["Wolf", "Goblin", "Zombie"]
         elif userinfo["location"] == "Saker Keep":
-            monsterlist = ["Draugr", "Stalker", "Souleater"]
+            monsterlist = ["Draugr", "Stalker", "SoulEater"]
 
         #IF PLAYER ISNT FIGHTING AN ENEMY, CHOOSE ONE BASED ON LOCATION
         if userinfo["selected_enemy"] == "None":
@@ -190,13 +190,13 @@ class RPG:
                 userinfo["selected_enemy"] = debi
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-                if userinfo["selected_enemy"] == "Rachi" or userinfo["selected_enemy"] == "Draugr":
+                if userinfo["selected_enemy"] == "Holy Priest" or userinfo["selected_enemy"] == "Draugr":
                     userinfo["enemyhp"] = random.randint(50, 75)
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-                elif userinfo["selected_enemy"] == "Debin" or userinfo["selected_enemy"] == "Stalker":
+                elif userinfo["selected_enemy"] == "Forgotten Spirit" or userinfo["selected_enemy"] == "Stalker":
                     userinfo["enemyhp"] = random.randint(50, 100)
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-                elif userinfo["selected_enemy"] == "Oofer" or userinfo["selected_enemy"] == "Souleater":
+                elif userinfo["selected_enemy"] == "Unholy Saint" or userinfo["selected_enemy"] == "SoulEater":
                     userinfo["enemyhp"] = random.randint(75, 125)
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)    
                 elif userinfo["selected_enemy"] == "Wolf":
@@ -233,17 +233,17 @@ class RPG:
         #ENEMY DAMAGE BASED ON ENEMY GROUPS
         enemydmg = 0
 
-        if userinfo["selected_enemy"] == "Rachi" or userinfo["selected_enemy"] == "Draugr":
+        if userinfo["selected_enemy"] == "Holy Priest" or userinfo["selected_enemy"] == "Draugr":
             enemydmg += random.randint(0, 10)
             enemygold = random.randint(25, 40)
             goldlost = random.randint(0, 60)
             xpgain = random.randint(5, 10)
-        elif userinfo["selected_enemy"] == "Debin" or userinfo["selected_enemy"] == "Stalker":
+        elif userinfo["selected_enemy"] == "Forgotten Spirit" or userinfo["selected_enemy"] == "Stalker":
             enemydmg += random.randint(0, 20)
             enemygold = random.randint(25, 50)
             goldlost = random.randint(0, 70)
             xpgain = random.randint(5, 20)
-        elif userinfo["selected_enemy"] == "Oofer" or userinfo["selected_enemy"] == "Souleater":
+        elif userinfo["selected_enemy"] == "Unholy Saint" or userinfo["selected_enemy"] == "SoulEater":
             enemydmg += random.randint(0, 30)
             enemygold = random.randint(35, 70)
             goldlost = random.randint(0, 80)
