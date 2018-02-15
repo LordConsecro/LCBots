@@ -57,11 +57,11 @@ class RPG:
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
             #we need more of an into here
-			into = []
+            into = []
             intro.append("!rpg start - starts or resets game\n")
-			
-			em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(show_list))), color=discord.Color.blue())
-			await self.bot.say(embed=em)
+            
+            em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(show_list))), color=discord.Color.blue())
+            await self.bot.say(embed=em)
             return
            
     #see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
@@ -262,17 +262,17 @@ class RPG:
             enemygold = random.randint(35, 70)
             goldlost = random.randint(0, 80)
             xpgain = random.randint(10, 25)
-		elif userinfo["selected_enemy"] == "Draugr":
+        elif userinfo["selected_enemy"] == "Draugr":
             enemydmg += random.randint(0, 10)
             enemygold = random.randint(25, 40)
             goldlost = random.randint(0, 60)
             xpgain = random.randint(5, 10)
-		elif userinfo["selected_enemy"] == "Stalker":
+        elif userinfo["selected_enemy"] == "Stalker":
             enemydmg += random.randint(0, 20)
             enemygold = random.randint(25, 50)
             goldlost = random.randint(0, 70)
             xpgain = random.randint(5, 20)
-		elif userinfo["selected_enemy"] == "SoulEater":
+        elif userinfo["selected_enemy"] == "SoulEater":
             enemydmg += random.randint(0, 30)
             enemygold = random.randint(35, 70)
             goldlost = random.randint(0, 80)
@@ -312,7 +312,7 @@ class RPG:
             options.append("cast")
             options.append("Cast")
             show_list.append("Cast")
-			
+            
         #IF FOR WHATEVER REASON THE USER DOES !rpg fight AGAIN, RETURN
         em = discord.Embed(description="<@{}> ```diff\n+ What skill would you like to use?\n\n- Choose one\n+ {}```".format(user.id, "\n+".join(show_list)), color=discord.Color.blue())
         await self.bot.say(embed=em)
