@@ -152,7 +152,7 @@ class RPG:
                 class_list.append("3: Mage")
                 class_list.append("4: Thief")
                 
-                em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What is your class:\n+ {}```".format("\n+ ".join(race_list)), color=0xffffff)
+                em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What is your class:\n+ {}```".format("\n+ ".join(class_list)), color=0xffffff)
                 await self.bot.say(embed=em)
 
                 answer2 = await self.check_answer(ctx, ["1", "ranger", "2", "paladin", "3", "mage", "4", "thief", "!rpg"])
