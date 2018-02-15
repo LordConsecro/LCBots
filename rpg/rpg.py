@@ -7,7 +7,7 @@ from __main__ import send_cmd_help
 from cogs.utils.dataIO import fileIO
 import shutil
 from random import choice
-"""The Adventure game.
+"""The rpg game.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
 Apache License, Version 2.0 as detailed in the accompanying README.txt.
@@ -24,7 +24,7 @@ def load_advent_dat(data):
         parse(data, datafile)
 
 def play(seed=None):
-    """Turn the Python prompt into an Adventure game.
+    """Turn the Python prompt into an rpg game.
 
     With optional the `seed` argument the caller can supply an integer
     to start the Python random number generator at a known state.
@@ -65,7 +65,7 @@ Apache License, Version 2.0 as detailed in the accompanying README.txt.
 from operator import attrgetter
 #from .model import Hint, Message, Move, Object, Room, Word
 
-# The Adventure data file knows only the first five characters of each
+# The rpg data file knows only the first five characters of each
 # word in the game, so we have to know the full verion of each word.
 
 long_words = { w[:5]: w for w in """upstream downstream forest
@@ -258,7 +258,7 @@ def section12(data, n, line):
 # Process every section of the file in turn.
 
 def parse(data, datafile):
-    """Read the Adventure data file and return a ``Data`` object."""
+    """Read the rpg data file and return a ``Data`` object."""
     data._last_travel = [0, [0]]  # x and verbs used by section 3
 
     while True:
@@ -1886,7 +1886,7 @@ class Game(Data):
 
     @classmethod
     def resume(self, obj):
-        """Returns an Adventure game saved to the given file."""
+        """Returns an rpg game saved to the given file."""
         if isinstance(obj, str):
             savefile = open(obj, 'rb')
         else:
@@ -1958,11 +1958,6 @@ class Game(Data):
         self.write_message(132)
         self.move_to()
 
-    # TODO: 12000
-    # TODO: 12200
-    # TODO: 12400
-    # TODO: 12600
-
     def wake_repository_dwarves(self):  #19000
         self.write_message(136)
         self.score_and_exit()
@@ -2033,11 +2028,7 @@ class Game(Data):
                        'would be a neat trick!\n\nCongratulations!!\n')
         self.is_done = True
 
-
-
-
-#model.py
-"""Classes representing Adventure game components.
+"""Classes representing rpg game components.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
 Apache License, Version 2.0 as detailed in the accompanying README.txt.
@@ -2229,11 +2220,7 @@ class Pirate(Dwarf):
     is_dwarf = False
     is_pirate = True
 
-
-
-
-#prompt.py
-"""Routines that install Adventure commands for the Python prompt.
+"""Routines that install rpg commands for the Python prompt.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
 Apache License, Version 2.0 as detailed in the accompanying README.txt.
@@ -2276,24 +2263,13 @@ def install_words(game):
         if len(word) > 5:
             namespace[word[:5]] = identifier
 
-
-
-
-#__main__.py
-"""Offer Adventure at a custom command prompt.
+"""Offer rpg at a custom command prompt.
 
 Copyright 2010-2015 Brandon Rhodes.  Licensed as free software under the
 Apache License, Version 2.0 as detailed in the accompanying README.txt.
 
 """
-# import argparse
-# import os
 import re
-# import readline
-# from sys import executable, stdout
-# from time import sleep
-#from . import load_advent_dat
-#from .game import Game
 
 BAUD = 1200
 
@@ -2319,13 +2295,11 @@ class NoGameRunning(Exception):
 class NoTeamMembers(Exception):
     pass
 
-class Adventure:
-    """The original Text Adventure game.
+class rpg:
+    """The original Text RPG game.
     
     Get a team together and embark on the first rpg together!
     """
-
-    #TODO: make all these classes instead........
 
     def __init__(self, bot):
         self.bot = bot
@@ -2338,32 +2312,6 @@ class Adventure:
         self.teams = fileIO('data/rpg/teams.json', 'load')
 
         self.game = {} # temp for testing
-
-        # do team name here instead. check who's in teams with self.teams first. switch.
-        # game_loops = {
-        #     "<channel1_id>" : {
-        #         "<author1_id>" : {
-        #             "CURRENT_GAME_SAVE" : "<original_author_id>/filename",
-        #             #or
-        #             "CURRENT_GAME_SAVE" : "team_name/filename", # team_name = 't' + term name
-        #             "GAME" : "<Game object>"
-        #         }
-        #     }
-        # }
-
-        # teams = {
-        #     "<channel1_id>" : {
-        #         "team_name" : ["<author1_id>", "<author2_id>"]
-        #     }
-        # }
-
-        # teams = {
-        #     "<author_id>" : "team_name"
-        # }
-
-    # you know what, how about just people create teams as default. Team has leader and members.
-    # users don't have their own saves. only teams can play. team of 1 is ok and default
-    # when save loaded, attach channel to it in self.saves?
 
     @commands.group(pass_context=True, aliases=['campsite'], no_pm=True)
     async def rpg(self, ctx):
@@ -2386,12 +2334,6 @@ class Adventure:
 
         await self.embark.callback(self, ctx, team, save)
         
-
-    # @rpg.command(pass_context=True)
-    # async def save(self, ctx, file):
-    #     pass
-
-    # if no team and no save, if user doesn't have a save, new game. otherwise new game must specify team and save
 
     @rpg.command(pass_context=True)
     async def embark(self, ctx, team: str=None, save: str=None):
@@ -2489,21 +2431,6 @@ class Adventure:
         if server.id not in self.game_loops:
             self.game_loops[server.id] = {}
 
-
-
-        # self.game_loops[server.id][team] = Game()
-        # # TODO: make which dat file to choose a setting
-        # load_advent_dat(game)
-        # if team not in self.game_loops[server.id]:
-        #     # what if no 1st save? = True
-
-        #     # self.game_loops[server.id][team] = {} # do elsewhere?
-        #     # add it?
-        #     pass
-        # if ctx.message.channel.id not in self.game_loops:
-        #     pass
-
-        # I think it overwrites current game either way. fix
         try:
             if self.game_loops[server.id][team][channel.id].get("PLAYING",False):
                 tname = self._team_name(server, team)
@@ -2520,27 +2447,9 @@ class Adventure:
         except:
             game = self.new_game(server, team, channel, save)
             msg += " sets off on an rpg!..\nInteract with the rpg with `{}> <command>`\n\n".format(ctx.prefix) + game.output
-        # try:
-        #     game = self.new_game(server, team, channel, save)
-        #     msg += " sets off on an rpg!..\n\n\n" + game.output
-        # except GameAlreadyRunning:
-        #     tname = self.teams[server.id]["TEAMS"][team]["NAME"]
-        #     await self.bot.say('{} The {} team already has embarked on an rpg in this channel. Any unsaved progress will be lost. Type `overwrite` to discard your unsaved progress.'.format(author.mention,tname))
-        #     answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
-        #     if 'overwrite' not in answer.content.lower():
-        #         await self.bot.say('The current rpg continues')
-        #         return
-        #     else:
-        #         game = self.load_game(server, team, channel, save)
-        #         msg += ' continues their rpg!\n\nGame Restored\n'
-        # except SaveAlreadyExists:
-        #     game = self.load_game(server, team, channel, save)
-        #     msg += ' continues their rpg!\n\nGame Restored\n'
         
         await self.baudout(ctx, msg)
-        #load_advent_dat(self.game[team])
 
-    # make team able to be None
     @rpg.command(pass_context=True)
     async def join(self, ctx, team=None):
         """Your team has embarked on an rpg without you?!
@@ -2743,7 +2652,6 @@ class Adventure:
         team = self._safe_path(team).lower()
         tname = self._team_name(server, team)
         try:
-            # http://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python
             files = list(filter(os.path.isfile, glob.glob('data/rpg/saves/{}/{}/*.save'.format(server.id, team))))
             files.sort(key=os.path.getmtime, reverse=True)
             if not files:
@@ -2855,14 +2763,11 @@ class Adventure:
         return
 
 
-    
-    # TODO: put self into do_command
     @commands.command(pass_context=True, name='>', no_pm=True)
     async def rpg_command(self, ctx, *, text):
         "Do something in your rpg"
         words = re.findall(r'\w+', text)
         if words:
-            # await self.baudout(ctx, game.do_command(words))
             channel = ctx.message.channel
             server = ctx.message.server
             author = ctx.message.author
@@ -2875,15 +2780,7 @@ class Adventure:
 
         pass
 
-
-    # edited - irdumbs
     async def loop(self):
-        # parser = argparse.ArgumentParser(
-        #     description='Adventure into the Colossal Caves.',
-        #     prog='{} -m rpg'.format(os.path.basename(executable)))
-        # parser.add_argument(
-        #     'savefile', nargs='?', help='The filename of game you have saved.')
-        # args = parser.parse_args()
 
         if args.savefile is None:
             # move to new
@@ -2907,18 +2804,7 @@ class Adventure:
                 await baudout(ctx, game.do_command(words))
 
 
-    # edited - irdumbs
     async def baudout(self, ctx, s):
-        # for c in s:
-        #     sleep(9. / BAUD)  # 8 bits + 1 stop bit @ the given baud rate
-        #     stdout.write(c)
-        #     stdout.flush()
-
-        # print(s)
-        # return
-
-        # should handle PMs too
-        # s = s.lower()
 
         dest = ctx.message.channel
         if len(s) < max_char_per_page:
@@ -2946,9 +2832,6 @@ class Adventure:
             await asyncio.sleep(2)
             await self.bot.send_message(dest,msg)
 
-    # get leader and .. 1st mate? of a team
-    # throws NoTeamMembers if no members in team left does not delete the team
-    # throws NoTeam if team is None or team doesn't exist
     def get_leaders(self, server, team, err_out=True):
         team = self._safe_path(team).lower()
         if server.id not in self.teams:
@@ -3014,13 +2897,6 @@ class Adventure:
         shutil.rmtree('{}/{}/{}'.format(bp, server.id, team))
 
 
-    # starts a new game.
-    # creates a new save if given and starts it
-    # for now assumes advent_dat
-    # uses _safe_path
-    # throws SaveAlreadyExists if save already exists
-    # throws GameAlreadyRunning if game is already running for server:team:channel
-    # TODO: move all load_advent_dat elsewhere or grab settings. or grab settings in load_advent_dat
     def new_game(self, server, team, channel, save=None):
         if team is None:
             raise NoTeam()
@@ -3078,10 +2954,6 @@ class Adventure:
         # done yet?
 
 
-    # saves the currently running game
-    # uses _safe_path
-    # throws NoGameRunning if no game is running
-    # not really any danger in letting 1 save traverse 2 channels. just can't let 1 game traverse 2 channels
     def save_game(self, server, team, channel, save):
         if team is None:
             raise NoTeam()
@@ -3098,11 +2970,6 @@ class Adventure:
         except:
             raise NoGameRunning('{}: {} doesn\'t have a game running in {}'.format(server.id, team, channel.mention))
 
-        # saves
-        # try:
-        #     del self.saves[server.id][teamf][self.game_loops[server.id][teamf][channel.id]['SAVE']]
-        # except:
-        #     print('troubles deleting-------------')
         self.saves[server.id][teamf][save.lower()] = channel.id
 
         self.game_loops[server.id][teamf][channel.id]['SAVE'] = save
@@ -3110,11 +2977,6 @@ class Adventure:
         return self.game_loops[server.id][teamf][channel.id]['GAME'].t_suspend('save','{}/{}/{}/{}.save'.format(bp, server.id, teamf, save.lower()))
         
 
-
-    # caller must specify team or choose default.
-    # loads save into channel. if none given, loads most recent save
-    # http://stackoverflow.com/questions/18279063/python-find-newest-file-with-mp3-extension-in-directory
-    # throws FileNotFoundError if save doesn't exist
     def load_game(self, server, team, channel, save=None):
 
         # return # not done
@@ -3197,7 +3059,6 @@ class Adventure:
             self.saves[server.id] = {}
         os.makedirs("{}/{}/{}".format(base_path, server.id, team))
 
-    # http://stackoverflow.com/questions/7406102/create-sane-safe-filename-from-any-unsafe-string
     def _safe_path(self, path):
         return "".join(c for c in path if c.isalnum() or c == '_').rstrip()
 
@@ -3205,7 +3066,6 @@ class Adventure:
         if name is None:
             return None
         fchars = ['_','*','`']
-        # (?:[{}][^{}]*[{}])*.*([{}])
         pats = ['(.*[^{}])([{}][^{}]*[{}])*.*([{}])'.format(c,c,c,c,c) for c in fchars]
         for num, reg in enumerate(pats):
             name = re.sub(reg, r'\1\\\3', name)
@@ -3216,16 +3076,6 @@ class Adventure:
         team = self._safe_path(team).lower()
         return self._format_name(self.teams[server.id]["TEAMS"][team]["NAME"])
 
-
-
-
-    # try:
-    #     # of course edit once in bot
-    #     # don't forget to correct paths
-    #     loop = asyncio.get_event_loop()
-    #     loop.run_until_complete(loop())
-    # except EOFError:
-    #     pass
 
 class MissingFile(Exception):
     pass
