@@ -2224,7 +2224,7 @@ class NoTeamMembers(Exception):
 class RPG:
     """The original Text RPG game.
     
-    Get a team together and embark on the first rpg together!
+    Get a team together and embark on your first rpg together!
     """
 
     def __init__(self, bot):
@@ -2236,9 +2236,9 @@ class RPG:
 
         self.game = {}
 
-    @commands.group(pass_context=True, aliases=['campsite'], no_pm=True)
+    @commands.group(pass_context=True, no_pm=True)
     async def rpg(self, ctx):
-        """Greetings rpgr. What is it that you plan on doing today?"""
+        """Greetings. What is it that you plan on doing today?"""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
             return
@@ -2280,7 +2280,7 @@ class RPG:
             if author.id not in self.teams[server.id]["MEMBERS"]:
                 if first: # lazy way of keeping 1st adv message
                     del self.teams[server.id]
-                await self.bot.say("{} You're not a part of a team yet. Start a new team by using `{}campsite embark <team_name>`".format(author.mention, ctx.prefix))
+                await self.bot.say("{} You're not a part of a team yet. Start a new team by using `{}embark <team_name>`".format(author.mention, ctx.prefix))
                 return
             # TODO: make sure to remove author.id when quit all teams
             team = self.teams[server.id]["MEMBERS"][author.id][0]
@@ -2307,7 +2307,6 @@ class RPG:
             else:
                 self.teams[server.id]["MEMBERS"][author.id].append(team)
             fileIO('data/rpg/teams.json', 'save', self.teams)
-            #print('updated rpg\'s teams.json with '+team)
         else: # existing team
             if author.id not in self.teams[server.id]["TEAMS"][team]["MEMBERS"]:
                 # don't allow teams with only 1 member
@@ -2532,7 +2531,7 @@ class RPG:
             leaders = self.get_leaders(server, team)
         except NoTeamMembers:
             self.delete_team(server, team)
-            await self.bot.reply("The {} team's members have dissapeared long ago. All that remains of their campsite is ashes.".format(tname))
+            await self.bot.reply("The {} team's members have disappeared long ago. All that remains of their campsite is ashes.".format(tname))
             return
         members = [server.get_member(m).name for m in self.teams[server.id]["TEAMS"][team]["MEMBERS"]]
         msg = "**{}** team members:\n\_**__Leader__**\_\n {}".format(tname, members[0])
