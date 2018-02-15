@@ -48,13 +48,19 @@ class RPG:
         else:
             return await self.check_answer(ctx, valid_options)
 
-    @commands.command (pass_context = True)
+	@commands.group(pass_context = True)
+    async def rpg(self, ctx):
+		if ctx.invoked_subcommand is None:
+            await bot.say("What would you like to do?")
+            return
+			
+    @rpg.command (pass_context = True)
     async def start(self, ctx):
         channel = ctx.message.channel
         server = channel.server
         user = ctx.message.author
         await self._create_user(user, server)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
 
         if not userinfo["class"] == "None" and not userinfo["race"] == "None":
             await self.bot.reply("Would you like to restart?")
@@ -90,7 +96,7 @@ class RPG:
                 userinfo["chop_block"] = 0
                 userinfo["mine_block"] = 0
                 userinfo["in_party"] = []
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 await self.bot.say("You have been reset! Please use `>start` again.")
                 return
             elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
@@ -107,13 +113,13 @@ class RPG:
             pass
         elif answer1 == "orc" or answer1 == "Orc":
             userinfo["race"] = "Orc"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
         elif answer1 == "human" or answer1 == "Human":
             userinfo["race"] = "Human"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
         elif answer1 == "tenti" or answer1 == "Tenti":
             userinfo["race"] = "Tenti"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
         await self.bot.reply("Great!\nWhat Class are you?\n`Choose one`\nArcher\nPaladin\nMage\nThief")
 
@@ -126,35 +132,35 @@ class RPG:
             userinfo["class"] = "Archer"
             userinfo["skills_learned"].append("Shoot")
             userinfo["equip"] = "Simple Bow"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             await self.bot.say("Great, enjoy your stay!")
             return
         elif answer2 == "paladin" or answer2 == "Paladin":
             userinfo["class"] = "Paladin"
             userinfo["skills_learned"].append("Swing")
             userinfo["equip"] = "Simple Sword"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             await self.bot.say("Great, enjoy your stay!")
             return
         elif answer2 == "mage" or answer2 == "Mage":
             userinfo["class"] = "Mage"
             userinfo["skills_learned"].append("Cast")
             userinfo["equip"] = "Simple Staff"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             await self.bot.say("Great, enjoy your stay!")
             return
         elif answer2 == "thief" or answer2 == "Thief":
             userinfo["class"] = "Thief"
             userinfo["skills_learned"].append("Stab")
             userinfo["equip"] = "Simple Dagger"
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             await self.bot.say("Great, enjoy your stay!")
             return
 
-    @commands.command(pass_context = True)
+    @rpg.command(pass_context = True)
     async def fight(self, ctx):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -182,26 +188,26 @@ class RPG:
 
             if answer1 == "y" or answer1 == "Y" or answer1 == "Yes" or answer1 == "yes":
                 userinfo["selected_enemy"] = debi
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
                 if userinfo["selected_enemy"] == "Rachi" or userinfo["selected_enemy"] == "Draugr":
                     userinfo["enemyhp"] = random.randint(50, 75)
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 elif userinfo["selected_enemy"] == "Debin" or userinfo["selected_enemy"] == "Stalker":
                     userinfo["enemyhp"] = random.randint(50, 100)
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 elif userinfo["selected_enemy"] == "Oofer" or userinfo["selected_enemy"] == "Souleater":
                     userinfo["enemyhp"] = random.randint(75, 125)
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)    
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)    
                 elif userinfo["selected_enemy"] == "Wolf":
                     userinfo["enemyhp"] = random.randint(150, 200)
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo) 
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo) 
                 elif userinfo["selected_enemy"] == "Goblin":
                     userinfo["enemyhp"] = random.randint(125, 150)
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)  
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)  
                 elif userinfo["selected_enemy"] == "Zombie":
                     userinfo["enemyhp"] = random.randint(175, 225)
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo) 
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo) 
             elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
                 await self.bot.say("Ok then.")
                 return
@@ -333,7 +339,7 @@ class RPG:
                 userinfo["selected_enemy"] = "None"
                 userinfo["enemieskilled"] = userinfo["enemieskilled"] + 1
                 userinfo["deaths"] = userinfo["deaths"] + 1
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
             elif userhealth <= 0:
                 em = discord.Embed(description="```diff\n- {} killed {}\n- {} lost {} gold```".format(userinfo["selected_enemy"], userinfo["name"], userinfo["name"], goldlost), color=discord.Color.red())
@@ -345,7 +351,7 @@ class RPG:
                     userinfo["health"] = 0
                 userinfo["selected_enemy"] = "None"
                 userinfo["deaths"] = userinfo["deaths"] + 1
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
             elif enemyhp <= 0:
                 em = discord.Embed(description="```diff\n+ {} killed the {}\n+ {} gained {} Gold\n+ {} gained {} Exp```".format(userinfo["name"], userinfo["selected_enemy"], userinfo["name"], enemygold, userinfo["name"], xpgain), color=discord.Color.blue())
@@ -358,23 +364,23 @@ class RPG:
                     em = discord.Embed(description="```diff\n+ {} Obtained a Lootbag!```".format(userinfo["name"]), color=discord.Color.blue())
                     await self.bot.say(embed=em)
                     userinfo["lootbag"] = userinfo["lootbag"] + 1
-                    fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 userinfo["enemieskilled"] = userinfo["enemieskilled"] + 1
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
             if userinfo["exp"] >= lvlexp:
                 em = discord.Embed(description="```diff\n+ {} gained a level!```".format(userinfo["name"]), color=discord.Color.blue())
                 await self.bot.say(embed=em)
                 userinfo["lvl"] = userinfo["lvl"] + 1
                 userinfo["health"] = 100
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-    @commands.command(pass_context=True)
+    @rpg.command(pass_context=True)
     async def lootbag(self, ctx):
         channel = ctx.message.channel
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -394,18 +400,18 @@ class RPG:
                 await self.bot.say(embed=em)
                 userinfo["gold"] = userinfo["gold"] + goldgain
                 userinfo["lootbag"] = userinfo["lootbag"] - 1
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             else:
                 em = discord.Embed(description="```diff\n- The Lootbag didn't contain anything!```", color=discord.Color.blue())
                 await self.bot.say(embed=em)
                 userinfo["lootbag"] = userinfo["lootbag"] - 1
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-    @commands.command (pass_context = True)
+    @rpg.command (pass_context = True)
     async def travel(self, ctx):
         channel = ctx.message.channel
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -460,25 +466,25 @@ class RPG:
         await self.bot.say(embed=em)
         await asyncio.sleep(3)
         userinfo["location"] = location_name
-        fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+        fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
         await self.bot.say("You have arrived at {}".format(location_name))
         em = discord.Embed(description="<@{}>\n```diff\n+ You have arrived at {}```".format(user.id, location_name), color=discord.Color.red())
         await self.bot.say(embed=em)
 
-    @commands.command(pass_context = True)
+    @rpg.command(pass_context = True)
     async def inv(self, ctx):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
         em = discord.Embed(description="```diff\n!======== [{}'s Inventory] ========!\n\n!==== [Supplies] ====!\n+ Gold : {}\n+ Wood : {}\n+ Stone : {}\n+ Metal : {}\n\n!===== [Items] =====!\n+ Keys : {}\n+ Loot Bags : {}\n+ Minor HP Potions : {}\n+ {}```".format(userinfo["name"], userinfo["gold"], userinfo["wood"], userinfo["stone"], userinfo["metal"], userinfo["keys"], userinfo["lootbag"], userinfo["hp_potions"], "\n+ ".join(userinfo["inventory"])), color=discord.Color.blue())
         await self.bot.say(embed=em)
 
-    @commands.command(pass_context = True)
+    @rpg.command(pass_context = True)
     async def stats(self, ctx):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -486,10 +492,10 @@ class RPG:
         em = discord.Embed(description="```diff\n!======== [{}'s Stats] ========!\n+ Name : {}\n+ Title : {}\n+ Race : {}\n+ Class : {}\n\n+ Level : {} | Exp : ({}/{})\n+ Health : ({}/100)\n+ Stamina : {}\n+ Mana : {}\n\n!===== [Equipment] =====!\n+ Weapon : {}\n+ Wearing : {}\n\n+ Killed : {} Enemies\n+ Died : {} Times```".format(userinfo["name"], userinfo["name"], userinfo["title"], userinfo["race"], userinfo["class"], userinfo["lvl"], userinfo["exp"], maxexp, userinfo["health"], userinfo["stamina"], userinfo["mana"], userinfo["equip"], userinfo["wearing"], userinfo["enemieskilled"], userinfo["deaths"]), color=discord.Color.blue())
         await self.bot.say(embed=em)
 
-    @commands.command(pass_context = True)
+    @rpg.command(pass_context = True)
     async def equip(self, ctx):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -510,12 +516,12 @@ class RPG:
             userinfo["equip"] = "None"
             userinfo["equip"] = answer1
             userinfo["inventory"].remove(answer1)
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-    @commands.group(pass_context = True)
+    @rpg.group(pass_context = True)
     async def buy(self, ctx):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -527,7 +533,7 @@ class RPG:
     @buy.command(pass_context=True)
     async def hp(self, ctx, *, ammount : int):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         Sum = ammount * 30
 
         if ammount == None:
@@ -540,14 +546,14 @@ class RPG:
         else:   
             userinfo["gold"] = userinfo["gold"] - Sum
             userinfo["hp_potions"] = userinfo["hp_potions"] + int(ammount)
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             em = discord.Embed(description="```diff\n+ You bought {} potion(s) for {} Gold```".format(ammount, Sum), color=discord.Color.blue())
             await self.bot.say(embed=em)
 
     @buy.command(pass_context=True)
     async def item(self, ctx, *, item):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if item == "sprine sword":
             if not userinfo["class"] == "Paladin":
                 em = discord.Embed(description="```diff\n- You need to be a Paladin to buy this item.```", color=discord.Color.red())
@@ -562,7 +568,7 @@ class RPG:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
                 userinfo["inventory"].append("Sprine Sword")
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
@@ -580,7 +586,7 @@ class RPG:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
                 userinfo["inventory"].append("Sprine Dagger")
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
@@ -598,7 +604,7 @@ class RPG:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
                 userinfo["inventory"].append("Sprine Bow")
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
@@ -616,14 +622,14 @@ class RPG:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
                 userinfo["inventory"].append("Sprine Staff")
-                fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
         else:
             em = discord.Embed(description="```diff\n- You have requested to buy an invalid item.\n\n+ To see the list of the items, type >items```", color=discord.Color.red())
             await self.bot.say(embed=em)
 
-    @commands.command(pass_context=True)
+    @rpg.command(pass_context=True)
     async def items(self, ctx, *, Class):
         user = ctx.message.author
         if Class == "Mage" or Class == "mage":
@@ -642,10 +648,10 @@ class RPG:
             em = discord.Embed(description="```diff\n- That is not a valid Class.```", color=discord.Color.red())
             await self.bot.say(embed=em)
 
-    @commands.command(pass_context = True)
+    @rpg.command(pass_context = True)
     async def heal(self, ctx):
         user = ctx.message.author
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -655,7 +661,7 @@ class RPG:
             if userinfo["health"] > 100:
                 userinfo["health"] = 100
             userinfo["hp_potions"] = userinfo["hp_potions"] - 1
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             em = discord.Embed(description="```diff\n- You use a Minor Health Potion\n+ {} HP```".format(gain), color=discord.Color.red())
             await self.bot.say(embed=em)
         else:
@@ -663,12 +669,12 @@ class RPG:
             await self.bot.say(embed=em)
 
 
-    @commands.command(pass_context=True)
+    @rpg.command(pass_context=True)
     async def daily(self, ctx):
         channel = ctx.message.channel
         user = ctx.message.author
         goldget = random.randint(500, 1000)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -681,23 +687,23 @@ class RPG:
                 return
             userinfo["gold"] += goldget
             userinfo["daily_block"] = curr_time
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             em = discord.Embed(description="```diff\n+ You recieved your daily gold!\n+ {}```".format(goldget), color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
-            # calulate time left
+            # calculate time left
             seconds = 86400 - delta
             m, s = divmod(seconds, 60)
             h, m = divmod(m, 60)
             em = discord.Embed(description="```diff\n- You can't claim your daily reward yet!\n\n- Time left:\n- {} Hours, {} Minutes, and {} Seconds```".format(int(h), int(m), int(s)), color=discord.Color.red())
             await self.bot.say(embed=em)
 
-    @commands.command(pass_context=True)
+    @rpg.command(pass_context=True)
     async def rest(self, ctx):
         channel = ctx.message.channel
         user = ctx.message.author
         HPget = random.randint(10, 40)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -712,24 +718,24 @@ class RPG:
             if userinfo["health"] > 100:
                 userinfo["health"] = 100
             userinfo["rest_block"] = curr_time
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             em = discord.Embed(description="```diff\n+ You gained {} HP for resting!```".format(HPget), color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
-            # calulate time left
+            # calculate time left
             seconds = 120 - delta
             m, s = divmod(seconds, 60)
             h, m = divmod(m, 60)
             em = discord.Embed(description="```diff\n- Your not tired!\n\n- Time left:\n- {} Hours, {} Minutes, and {} Seconds```".format(int(h), int(m), int(s)), color=discord.Color.red())
             await self.bot.say(embed=em)
 
-    @commands.command(pass_context=True)
+    @rpg.command(pass_context=True)
     async def mine(self, ctx):
         channel = ctx.message.channel
         user = ctx.message.author
         mined_metal = random.randint(1, 10)
         mined_rock = random.randint(1, 10)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -743,23 +749,23 @@ class RPG:
             userinfo["metal"] = userinfo["metal"] + mined_metal
             userinfo["stone"] = userinfo["stone"] + mined_rock
             userinfo["mine_block"] = curr_time
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             em = discord.Embed(description="```diff\n+ You mined a Rock!\n+ {} Metal\n+ {} Stone```".format(mined_metal, mined_rock), color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
-            # calulate time left
+            # calculate time left
             seconds = 600 - delta
             m, s = divmod(seconds, 60)
             h, m = divmod(m, 60)
             em = discord.Embed(description="```diff\n- You cannot mine yet!\n\n- Time left:\n- {} Hours, {} Minutes, and {} Seconds```".format(int(h), int(m), int(s)), color=discord.Color.red())
             await self.bot.say(embed=em)
 
-    @commands.command(pass_context=True)
+    @rpg.command(pass_context=True)
     async def chop(self, ctx):
         channel = ctx.message.channel
         user = ctx.message.author
         chopped = random.randint(1, 10)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
@@ -772,11 +778,11 @@ class RPG:
                 return
             userinfo["wood"] = userinfo["wood"] + chopped
             userinfo["chop_block"] = curr_time
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", userinfo)
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
             em = discord.Embed(description="```diff\n+ You chopped a Tree!\n+ {} Wood```".format(chopped), color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
-            # calulate time left
+            # calculate time left
             seconds = 600 - delta
             m, s = divmod(seconds, 60)
             h, m = divmod(m, 60)
@@ -800,12 +806,12 @@ class RPG:
         user = message.author
         # creates user if doesn't exist, bots are not logged.
         await self._create_user(user, server)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
 
     # handles user creation.
     async def _create_user(self, user, server):
-        if not os.path.exists("data/alcher/players/{}".format(user.id)):
-            os.makedirs("data/alcher/players/{}".format(user.id))
+        if not os.path.exists("data/rpg/players/{}".format(user.id)):
+            os.makedirs("data/rpg/players/{}".format(user.id))
             new_account = {
                 "name": user.name,
                 "race": "None",
@@ -824,7 +830,7 @@ class RPG:
                 "exp": 0,
                 "lootbag": 0,
                 "wearing": "None",
-                "defence": 0,
+                "defense": 0,
                 "guild": "None",
                 "inguild": "None",
                 "skills_learned": [],
@@ -852,25 +858,25 @@ class RPG:
                 "duneon_enemy_hp": 0,
                 "in_party": []
             }
-            fileIO("data/alcher/players/{}/info.json".format(user.id), "save", new_account)
-        userinfo = fileIO("data/alcher/players/{}/info.json".format(user.id), "load")
+            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", new_account)
+        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
 
 def check_folders():
-    if not os.path.exists("data/alcher"):
-        print("Creating data/alcher folder...")
-        os.makedirs("data/alcher")
+    if not os.path.exists("data/rpg"):
+        print("Creating data/rpg folder...")
+        os.makedirs("data/rpg")
 
-    if not os.path.exists("data/alcher/players"):
-        print("Creating data/alcher/players folder...")
-        os.makedirs("data/alcher/players")
+    if not os.path.exists("data/rpg/players"):
+        print("Creating data/rpg/players folder...")
+        os.makedirs("data/rpg/players")
         transfer_info()
 
 def transfer_info():
-    players = fileIO("data/alcher/players.json", "load")
+    players = fileIO("data/rpg/players.json", "load")
     for user_id in players:
-        os.makedirs("data/alcher/players/{}".format(user_id))
+        os.makedirs("data/rpg/players/{}".format(user_id))
         # create info.json
-        f = "data/alcher/players/{}/info.json".format(user_id)
+        f = "data/rpg/players/{}/info.json".format(user_id)
         if not fileIO(f, "check"):
             fileIO(f, "save", players[user_id])
 
