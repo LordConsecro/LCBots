@@ -1,3 +1,4 @@
+#This is all your imports, if you have to import code from other scripts
 import discord
 from discord.ext import commands
 from discord.utils import find
@@ -18,10 +19,13 @@ try:
 except:
     pass
 
+#this fetches our prefix for the server
 prefix = fileIO("data/red/settings.json", "load")['PREFIXES']
 
+#this is just a dev ID 
 dev = ["312127693242236928"]
 
+#this calls the main bot cog (the name per say)
 class RPG:
     def __init__(self, bot):
         self.bot = bot
@@ -48,12 +52,14 @@ class RPG:
         else:
             return await self.check_answer(ctx, valid_options)
 
-    @commands.group(pass_context = True)
+	#this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
+    @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
             await self.bot.say("What command would you like to do?")
             return
-            
+           
+	#see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
     @rpg.command (pass_context = True)
     async def start(self, ctx):
         channel = ctx.message.channel
