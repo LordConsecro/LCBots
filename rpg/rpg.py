@@ -130,7 +130,7 @@ class RPG:
                 race_list.append("2: Orc")
                 race_list.append("3: Elf")
                 
-                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n-What is your race?\n+{}```".format(user.name, "\n+".join(race_list)), color=discord.Color.blue())
+                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n-What is your race?\n+ {}```".format(user.name, "\n+ ".join(race_list)), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
                 answer1 = await self.check_answer(ctx, ["1", "human", "2", "orc", "3", "elf", "!rpg"])
