@@ -338,7 +338,7 @@ class RPG:
             options.append("Cast")
             show_list.append("Cast")
             
-        em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What skill would you like to use:\n+ {}```".format("\n+ ".join(menu_list)), color=discord.Color.blue())
+        em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What skill would you like to use:\n+ {}```".format("\n+ ".join(show_list)), color=discord.Color.blue())
         
         await self.bot.say(embed=em)
         
