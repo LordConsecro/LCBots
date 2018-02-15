@@ -97,7 +97,7 @@ class RPG:
                 userinfo["mine_block"] = 0
                 userinfo["in_party"] = []
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-                await self.bot.say("You have been reset! Please use `>start` again.")
+                await self.bot.say("{}, you have been reset! Please use `!rpg start` again.".format(userinfo["name"]))
                 return
             elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
                 await self.bot.say("Ok then")
@@ -162,11 +162,11 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("{}, Please start your character using `!rpg start`".format(userinfo["name"]))
             return
 
         if userinfo["health"] <= 0:
-            await self.bot.reply("You cannot fight with 0 HP")
+            await self.bot.reply("{}, you cannot fight with 0 HP".format(userinfo["name"]))
             return
 
         if userinfo["location"] == "Golden Temple":
@@ -179,7 +179,7 @@ class RPG:
         #IF PLAYER ISNT FIGHTING AN ENEMY, CHOOSE ONE BASED ON LOCATION
         if userinfo["selected_enemy"] == "None":
             debi = random.choice((monsterlist))
-            await self.bot.say("{} wander around {} and find a {}.\nWould you like to fight it? **Y** or **N**".format(userinfo["name"], userinfo["location"], debi))
+            await self.bot.say("{} wanders around {} and finds a {}.\nWould you like to fight it? **Y** or **N**".format(userinfo["name"], userinfo["location"], debi))
             options = ["y", "Y", "yes", "Yes", "n", "N", "No", "no", ">fight"]
             answer1 = await self.check_answer(ctx, options)
 
@@ -385,11 +385,11 @@ class RPG:
             await self.bot.say("Please start your character using `>start`")
             return
         if userinfo["lootbag"] == 0:
-            em = discord.Embed(description="```diff\n- You don't have any Lootbags!```", color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n- {}, you don't have any Loot bags!```".format(userinfo["name"]), color=discord.Color.blue())
             await self.bot.say(embed=em)
             return
         else:
-            em = discord.Embed(description="```diff\n+ {} Starts opening a Lootbag. . .```".format(userinfo["name"]), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ {} starts opening a Lootbag. . .```".format(userinfo["name"]), color=discord.Color.blue())
             await self.bot.say(embed=em)
             await asyncio.sleep(5)
             chance = random.randint(1, 3)
@@ -413,7 +413,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg start`")
             return
         options = []
         options2 = []
