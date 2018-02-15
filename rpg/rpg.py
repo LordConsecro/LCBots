@@ -60,7 +60,7 @@ class RPG:
             into = []
             intro.append("!rpg start - starts or resets game\n")
             
-            em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(show_list))), color=discord.Color.blue())
+            em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(intro))), color=discord.Color.blue())
             await self.bot.say(embed=em)
             return
            
