@@ -57,11 +57,11 @@ class RPG:
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
             #we need more of an into here
-            intro = "What command would you like to do?\n"
-            intro += "!rpg start - starts or resets game\n"
-            
-            await self.bot.say(intro)
-            
+			into = []
+            intro.append("!rpg start - starts or resets game\n")
+			
+			em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(show_list))), color=discord.Color.blue())
+			await self.bot.say(embed=em)
             return
            
     #see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
@@ -137,9 +137,9 @@ class RPG:
 
         await self.bot.reply("Great!\nWhat Class are you?\n`Choose one`\nArcher\nPaladin\nMage\nThief")
 
-        answer2 = await self.check_answer(ctx, ["archer", "paladin", "mage", "thief", ">start"])
+        answer2 = await self.check_answer(ctx, ["archer", "paladin", "mage", "thief", "!rpg start"])
 
-        if answer2 == ">start":
+        if answer2 == "!rpg start":
             return
 
         elif answer2 == "archer" or answer2 == "Archer":
@@ -194,10 +194,10 @@ class RPG:
         if userinfo["selected_enemy"] == "None":
             debi = random.choice((monsterlist))
             await self.bot.say("{} wanders around {} and finds a {}.\nWould you like to fight it? **Y** or **N**".format(userinfo["name"], userinfo["location"], debi))
-            options = ["y", "Y", "yes", "Yes", "n", "N", "No", "no", ">fight"]
+            options = ["y", "Y", "yes", "Yes", "n", "N", "No", "no", "!rpg fight"]
             answer1 = await self.check_answer(ctx, options)
 
-            if answer1 == ">fight":
+            if answer1 == "!rpg fight":
                 pass
 
             if answer1 == "y" or answer1 == "Y" or answer1 == "Yes" or answer1 == "yes":
@@ -223,7 +223,7 @@ class RPG:
                     userinfo["enemyhp"] = random.randint(175, 225)
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo) 
             elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
-                await self.bot.say("Ok then.")
+                await self.bot.say("Okay then.")
                 return
         #YOUR DAMAGE BASED ON THE WEAPON YOUR HOLDING
         youdmg = 0
@@ -235,29 +235,44 @@ class RPG:
             youdmg += random.randint(5, 25)
         elif userinfo["equip"] == "Simple Sword":
             youdmg += random.randint(5, 25)
-        elif userinfo["equip"] == "Sprine Dagger":
+        elif userinfo["equip"] == "Precise Dagger":
             youdmg += random.randint(10, 60)
-        elif userinfo["equip"] == "Sprine Staff":
+        elif userinfo["equip"] == "Precise Staff":
             youdmg += random.randint(10, 60)
-        elif userinfo["equip"] == "Sprine Bow":
+        elif userinfo["equip"] == "Precise Bow":
             youdmg += random.randint(10, 60)
-        elif userinfo["equip"] == "Sprine Sword":
+        elif userinfo["equip"] == "Precise Sword":
             youdmg += random.randint(10, 60)
 
         #ENEMY DAMAGE BASED ON ENEMY GROUPS
         enemydmg = 0
 
-        if userinfo["selected_enemy"] == "Holy Priest" or userinfo["selected_enemy"] == "Draugr":
+        if userinfo["selected_enemy"] == "Holy Priest":
             enemydmg += random.randint(0, 10)
             enemygold = random.randint(25, 40)
             goldlost = random.randint(0, 60)
             xpgain = random.randint(5, 10)
-        elif userinfo["selected_enemy"] == "Forgotten Spirit" or userinfo["selected_enemy"] == "Stalker":
+        elif userinfo["selected_enemy"] == "Forgotten Spirit":
             enemydmg += random.randint(0, 20)
             enemygold = random.randint(25, 50)
             goldlost = random.randint(0, 70)
             xpgain = random.randint(5, 20)
-        elif userinfo["selected_enemy"] == "Unholy Saint" or userinfo["selected_enemy"] == "SoulEater":
+        elif userinfo["selected_enemy"] == "Unholy Saint":
+            enemydmg += random.randint(0, 30)
+            enemygold = random.randint(35, 70)
+            goldlost = random.randint(0, 80)
+            xpgain = random.randint(10, 25)
+		elif userinfo["selected_enemy"] == "Draugr":
+            enemydmg += random.randint(0, 10)
+            enemygold = random.randint(25, 40)
+            goldlost = random.randint(0, 60)
+            xpgain = random.randint(5, 10)
+		elif userinfo["selected_enemy"] == "Stalker":
+            enemydmg += random.randint(0, 20)
+            enemygold = random.randint(25, 50)
+            goldlost = random.randint(0, 70)
+            xpgain = random.randint(5, 20)
+		elif userinfo["selected_enemy"] == "SoulEater":
             enemydmg += random.randint(0, 30)
             enemygold = random.randint(35, 70)
             goldlost = random.randint(0, 80)
@@ -297,7 +312,8 @@ class RPG:
             options.append("cast")
             options.append("Cast")
             show_list.append("Cast")
-        #IF FOR WHATEVER REASON THE USER DOES >fight AGAIN, RETURN
+			
+        #IF FOR WHATEVER REASON THE USER DOES !rpg fight AGAIN, RETURN
         em = discord.Embed(description="<@{}> ```diff\n+ What skill would you like to use?\n\n- Choose one\n+ {}```".format(user.id, "\n+".join(show_list)), color=discord.Color.blue())
         await self.bot.say(embed=em)
         answer2 = await self.check_answer(ctx, options)
@@ -539,7 +555,7 @@ class RPG:
         if userinfo["race"] and userinfo["class"] == "None":
             await self.bot.say("Please start your character using `>start`")
             return
-        weapons_list = ["hp","Hp", "Sprine sword", "sprine sword", "Sprine bow", "sprine bow", "Sprine dagger", "sprine dagger", "Sprine staff", "sprine staff"]
+        weapons_list = ["hp","Hp", "Precise sword", "Precise sword", "Precise bow", "Precise bow", "Precise dagger", "Precise dagger", "Precise staff", "Precise staff"]
         if ctx.invoked_subcommand is None:
             em = discord.Embed(description="```>buy item_name\n\nNote: It must all be lowercase.```", color=discord.Color.blue())
             await self.bot.say(embed=em)
@@ -568,7 +584,7 @@ class RPG:
     async def item(self, ctx, *, item):
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
-        if item == "sprine sword":
+        if item == "Precise sword":
             if not userinfo["class"] == "Paladin":
                 em = discord.Embed(description="```diff\n- You need to be a Paladin to buy this item.```", color=discord.Color.red())
                 await self.bot.say(embed=em)
@@ -581,12 +597,12 @@ class RPG:
             else:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
-                userinfo["inventory"].append("Sprine Sword")
+                userinfo["inventory"].append("Precise Sword")
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
-        elif item == "sprine dagger":
+        elif item == "Precise dagger":
             if not userinfo["class"] == "Thief":
                 em = discord.Embed(description="```diff\n- You need to be a Thief to buy this item.```", color=discord.Color.red())
                 await self.bot.say(embed=em)
@@ -599,12 +615,12 @@ class RPG:
             else:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
-                userinfo["inventory"].append("Sprine Dagger")
+                userinfo["inventory"].append("Precise Dagger")
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
-        elif item == "sprine bow":
+        elif item == "Precise bow":
             if not userinfo["class"] == "Archer":
                 em = discord.Embed(description="```diff\n- You need to be an Archer to buy this item.```", color=discord.Color.red())
                 await self.bot.say(embed=em)
@@ -617,12 +633,12 @@ class RPG:
             else:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
-                userinfo["inventory"].append("Sprine Bow")
+                userinfo["inventory"].append("Precise Bow")
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
-        elif item == "sprine staff":
+        elif item == "Precise staff":
             if not userinfo["class"] == "Mage":
                 em = discord.Embed(description="```diff\n- You need to be a Mage to buy this item.```", color=discord.Color.red())
                 await self.bot.say(embed=em)
@@ -635,7 +651,7 @@ class RPG:
             else:
                 cost = 1000
                 userinfo["gold"] = userinfo["gold"] - cost
-                userinfo["inventory"].append("Sprine Staff")
+                userinfo["inventory"].append("Precise Staff")
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 em = discord.Embed(description="```diff\n+ You bought the item for {} Gold.```".format(cost), color=discord.Color.blue())
                 await self.bot.say(embed=em)
@@ -647,16 +663,16 @@ class RPG:
     async def items(self, ctx, *, Class):
         user = ctx.message.author
         if Class == "Mage" or Class == "mage":
-            em = discord.Embed(description="```diff\n+ Item list for the Mage Class.```\n\n1) Sprine Staff - [1,000 Gold]", color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ Item list for the Mage Class.```\n\n1) Precise Staff - [1,000 Gold]", color=discord.Color.blue())
             await self.bot.say(embed=em)
         elif Class == "Paladin" or Class == "paladin":
-            em = discord.Embed(description="```diff\n+ Item list for the Paladin Class.```\n\n1) Sprine Sword - [1,000 Gold]", color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ Item list for the Paladin Class.```\n\n1) Precise Sword - [1,000 Gold]", color=discord.Color.blue())
             await self.bot.say(embed=em)
         elif Class == "Thief" or Class == "thief":
-            em = discord.Embed(description="```diff\n+ Item list for the Thief Class.```\n\n1) Sprine Dagger - [1,000 Gold]", color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ Item list for the Thief Class.```\n\n1) Precise Dagger - [1,000 Gold]", color=discord.Color.blue())
             await self.bot.say(embed=em)
         elif Class == "Archer" or Class == "archer":
-            em = discord.Embed(description="```diff\n+ Item list for the Archer Class.```\n\n1) Sprine Bow - [1,000 Gold]", color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ Item list for the Archer Class.```\n\n1) Precise Bow - [1,000 Gold]", color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
             em = discord.Embed(description="```diff\n- That is not a valid Class.```", color=discord.Color.red())
