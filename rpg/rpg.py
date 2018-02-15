@@ -57,7 +57,7 @@ class RPG:
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
             #we need more of an into here
-            into = []
+            intro = []
             intro.append("!rpg start - starts or resets game\n")
             
             em = discord.Embed(description="<@{}> ```diff\n+ Welcome Adventurer! Choose an option:\n+ {}```".format(user.id, "\n+".join(intro))), color=discord.Color.blue())
