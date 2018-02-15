@@ -68,8 +68,8 @@ class RPG:
             elif not userinfo["race"] == "None":
                 intro_list.append("1: Reset Character")
             
-            embed=discord.Embed(author: {name: user.name}, title="Select an option:", description="{}".format('\n'.join(race_list), color=0xffffff)
-            await self.bot.say(embed=embed)
+            em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- Select an Option:\n+ {}```".format("\n+ ".join(intro_list)), color=0xffffff)
+            await self.bot.say(embed=em)
             
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
