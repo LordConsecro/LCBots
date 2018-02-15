@@ -56,7 +56,12 @@ class RPG:
     @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
-            await self.bot.say("What command would you like to do?")
+			#we need more of an into here
+			intro = "What command would you like to do?\n"
+			intro += "!rpg start - starts or resets game\n"
+			
+            await self.bot.say(intro)
+			
             return
            
 	#see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
@@ -70,9 +75,9 @@ class RPG:
 
         if not userinfo["class"] == "None" and not userinfo["race"] == "None":
             await self.bot.reply("Would you like to restart?")
-            answer1 = await self.check_answer(ctx, ["yes", "no", "n", "y", ">start"])
+            answer1 = await self.check_answer(ctx, ["yes", "no", "n", "y", "!rpg start"])
 
-            if answer1 == ">start":
+            if answer1 == "!rpg start":
                 pass
             elif answer1 == "y" or answer1 == "Y" or answer1 == "yes" or answer1 == "Yes":
                 userinfo["gold"] = 0
