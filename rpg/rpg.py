@@ -68,7 +68,7 @@ class RPG:
             elif not userinfo["race"] == "None":
                 intro_list.append("1: Reset Character")
             
-            em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- Choose an option\n+ {}```".format("\n+ ".join(intro_list)), color=0xffffff)
+            em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- Choose an option:\n+ {}```".format("\n+ ".join(intro_list)), color=0xffffff)
             await self.bot.say(embed=em)
             
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
@@ -123,14 +123,13 @@ class RPG:
                     elif answer0 == "n" or answer0 == "N" or answer0 == "no" or answer0 == "No":
                         await self.bot.say("Restart Canceled")
                         return
-                        
                 
                 race_list = []
                 race_list.append("1: Human")
                 race_list.append("2: Orc")
                 race_list.append("3: Elf")
                 
-                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- What is your race?\n+ {}```".format(user.name, "\n+ ".join(race_list)), color=discord.Color.white())
+                em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What is your race:\n+ {}```".format("\n+ ".join(race_list)), color=0xffffff)
                 await self.bot.say(embed=em)
 
                 answer1 = await self.check_answer(ctx, ["1", "human", "2", "orc", "3", "elf", "!rpg"])
@@ -147,14 +146,13 @@ class RPG:
                     userinfo["race"] = "Elf"
                     fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-                    
                 class_list = []
                 class_list.append("1: Ranger")
                 class_list.append("2: Paladin")
                 class_list.append("3: Mage")
                 class_list.append("4: Thief")
                 
-                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- What is your class?\n+ {}```".format(user.name, "\n+ ".join(class_list)), color=discord.Color.white())
+                em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What is your class:\n+ {}```".format("\n+ ".join(race_list)), color=0xffffff)
                 await self.bot.say(embed=em)
 
                 answer2 = await self.check_answer(ctx, ["1", "ranger", "2", "paladin", "3", "mage", "4", "thief", "!rpg"])
