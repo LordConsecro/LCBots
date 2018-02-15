@@ -79,7 +79,7 @@ class RPG:
 
                 if not userinfo["class"] == "None" and not userinfo["race"] == "None":
                     await self.bot.reply("Are you sure you want to restart?")
-                    answer1 = await self.check_answer(ctx, ["1", "2", "!rpg"])
+                    answer1 = await self.check_answer(ctx, ["y", "yes", "n", "no", "!rpg"])
 
                     if answer1 == "!rpg":
                         pass
