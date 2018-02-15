@@ -179,7 +179,7 @@ class RPG:
         #IF PLAYER ISNT FIGHTING AN ENEMY, CHOOSE ONE BASED ON LOCATION
         if userinfo["selected_enemy"] == "None":
             debi = random.choice((monsterlist))
-            await self.bot.say("You wander around {} and find a {}.\nWould you like to fight it? **Y** or **N**".format(userinfo["location"], debi))
+            await self.bot.say("{} wander around {} and find a {}.\nWould you like to fight it? **Y** or **N**".format(userinfo["name"], userinfo["location"], debi))
             options = ["y", "Y", "yes", "Yes", "n", "N", "No", "no", ">fight"]
             answer1 = await self.check_answer(ctx, options)
 
@@ -750,7 +750,7 @@ class RPG:
             userinfo["stone"] = userinfo["stone"] + mined_rock
             userinfo["mine_block"] = curr_time
             fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-            em = discord.Embed(description="```diff\n+ You mined a Rock!\n+ {} Metal\n+ {} Stone```".format(mined_metal, mined_rock), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ {} mined a Rock!\n+ {} Metal\n+ {} Stone```".format(userinfo["name"], mined_metal, mined_rock), color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
             # calculate time left
