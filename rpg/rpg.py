@@ -53,11 +53,11 @@ class RPG:
         else:
             return await self.check_answer(ctx, valid_options)
         
-    @RPG.event
+    @rpg.event
     async def on_message(message):
         if message.content.startswith('!rpg'):
-            await RPG.delete_message(message)
-        await RPG.process_commands(message)
+            await rpg.delete_message(message)
+        await rpg.process_commands(message)
 
     #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
