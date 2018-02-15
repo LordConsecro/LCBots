@@ -65,7 +65,7 @@ class RPG:
             intro_list.append("1: New Character")
             intro_list.append("2: Reset Character")
             
-            em = discord.Embed(description="```diff\n+{}, welcome to LC Dungeons!\n- Choose an option\n+{}```".format(user.name, "\n+".join(intro_list)), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n==X[ {} ]X==\n\n- Choose an option\n+{}```".format(user.name, "\n+".join(intro_list)), color=discord.Color.blue())
             await self.bot.say(embed=em)
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
@@ -127,7 +127,7 @@ class RPG:
                 race_list.append("2: Orc")
                 race_list.append("3: Elf")
                 
-                em = discord.Embed(description="```diff\n==[{}]==\nWhat is your race?\n+{}```".format(user.name, "\n+".join(race_list)), color=discord.Color.blue())
+                em = discord.Embed(description="```diff\n==X[ {} ]X==\n\n-What is your race?\n+{}```".format(user.name, "\n+".join(race_list)), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
                 answer1 = await self.check_answer(ctx, ["1", "human", "2", "orc", "3", "elf", "!rpg"])
