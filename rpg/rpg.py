@@ -68,7 +68,7 @@ class RPG:
             elif not userinfo["class"] == "None" and not userinfo["race"] == "None":
                 intro_list.append("1: Reset Character")
             
-            em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- Choose an option\n+{}```".format(user.name, "\n+".join(intro_list)), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- Choose an option\n+ {}```".format(user.name, "\n+ ".join(intro_list)), color=discord.Color.blue())
             await self.bot.say(embed=em)
             
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
@@ -130,7 +130,7 @@ class RPG:
                 race_list.append("2: Orc")
                 race_list.append("3: Elf")
                 
-                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n-What is your race?\n+ {}```".format(user.name, "\n+ ".join(race_list)), color=discord.Color.blue())
+                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- What is your race?\n+ {}```".format(user.name, "\n+ ".join(race_list)), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
                 answer1 = await self.check_answer(ctx, ["1", "human", "2", "orc", "3", "elf", "!rpg"])
@@ -154,7 +154,7 @@ class RPG:
                 class_list.append("3: Mage")
                 class_list.append("4: Thief")
                 
-                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n-What is your class?\n+{}```".format(user.name, "\n+".join(class_list)), color=discord.Color.blue())
+                em = discord.Embed(description="```diff\n|====[ {} ]====|\n\n- What is your class?\n+ {}```".format(user.name, "\n+ ".join(class_list)), color=discord.Color.blue())
                 await self.bot.say(embed=em)
 
                 answer2 = await self.check_answer(ctx, ["1", "ranger", "2", "paladin", "3", "mage", "4", "thief", "!rpg"])
