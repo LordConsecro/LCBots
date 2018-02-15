@@ -42,6 +42,7 @@ class RPG:
 
         if answer.content.lower() in valid_options:
             return answer.content
+            
 
         elif answer.content in valid_options:
             return answer.content
@@ -51,6 +52,12 @@ class RPG:
 
         else:
             return await self.check_answer(ctx, valid_options)
+        
+    @RPG.event
+    async def on_message(message):
+        if message.content.startswith('!rpg'):
+            await RPG.delete_message(message)
+        await RPG.process_commands(message)
 
     #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
@@ -336,9 +343,10 @@ class RPG:
             options.append("Cast")
             show_list.append("Cast")
             
-        #IF FOR WHATEVER REASON THE USER DOES !rpg fight AGAIN, RETURN
-        em = discord.Embed(description="<@{}> ```diff\n+ What skill would you like to use?\n\n- Choose one\n+ {}```".format(user.id, "\n+".join(show_list)), color=discord.Color.blue())
+        em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- What skill would you like to use:\n+ {}```".format("\n+ ".join(menu_list)), color=discord.Color.blue())
+        
         await self.bot.say(embed=em)
+        
         answer2 = await self.check_answer(ctx, options)
 
         if answer2 == "!rpg fight":
