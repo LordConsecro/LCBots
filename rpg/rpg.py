@@ -69,7 +69,7 @@ class RPG:
                 intro_list.append("1: Reset Character")
             
             embed=discord.Embed(title="Select an option:", description="{}".format('\n'.join(race_list), color=0xffffff)
-            embed.set_author(name="Lord Consecro")
+            embed.set_author(name=str(user.name))
             await self.bot.say(embed=embed)
             
             answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
