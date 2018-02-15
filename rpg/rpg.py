@@ -59,6 +59,7 @@ class RPG:
             await send_cmd_help(ctx)
             return
             
+	# this is the main menu
     @rpg.command(pass_context = True)
     async def menu(self, ctx):
         channel = ctx.message.channel
@@ -66,14 +67,13 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         
-        #we need more of an into here
-        intro_list = []
+        menu_list = []
         if userinfo["race"] == "None":
-            intro_list.append("1: New Character")
+            menu_list.append("1: New Character")
         elif not userinfo["race"] == "None":
-            intro_list.append("1: Reset Character")
+            menu_list.append("1: Reset Character")
         
-        em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- Select an Option:\n+ {}```".format("\n+ ".join(intro_list)), color=0xffffff)
+        em = discord.Embed(title="|====[ {} ]====|".format(user.name), description="```diff\n\n- Select an Option:\n+ {}```".format("\n+ ".join(menu_list)), color=0xffffff)
         await self.bot.say(embed=em)
         
         answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
@@ -435,7 +435,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please create a character using `!rpg menu`")
             return
         if userinfo["lootbag"] == 0:
             em = discord.Embed(description="```diff\n- {}, you don't have any Loot bags!```".format(userinfo["name"]), color=discord.Color.blue())
@@ -466,7 +466,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `!rpg start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         options = []
         options2 = []
@@ -529,7 +529,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         em = discord.Embed(description="```diff\n!======== [{}'s Inventory] ========!\n\n!==== [Supplies] ====!\n+ Gold : {}\n+ Wood : {}\n+ Stone : {}\n+ Metal : {}\n\n!===== [Items] =====!\n+ Keys : {}\n+ Loot Bags : {}\n+ Minor HP Potions : {}\n+ {}```".format(userinfo["name"], userinfo["gold"], userinfo["wood"], userinfo["stone"], userinfo["metal"], userinfo["keys"], userinfo["lootbag"], userinfo["hp_potions"], "\n+ ".join(userinfo["inventory"])), color=discord.Color.blue())
         await self.bot.say(embed=em)
@@ -539,7 +539,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         maxexp = 100 * userinfo["lvl"]
         em = discord.Embed(description="```diff\n!======== [{}'s Stats] ========!\n+ Name : {}\n+ Title : {}\n+ Race : {}\n+ Class : {}\n\n+ Level : {} | Exp : ({}/{})\n+ Health : ({}/100)\n+ Stamina : {}\n+ Mana : {}\n\n!===== [Equipment] =====!\n+ Weapon : {}\n+ Wearing : {}\n\n+ Killed : {} Enemies\n+ Died : {} Times```".format(userinfo["name"], userinfo["name"], userinfo["title"], userinfo["race"], userinfo["class"], userinfo["lvl"], userinfo["exp"], maxexp, userinfo["health"], userinfo["stamina"], userinfo["mana"], userinfo["equip"], userinfo["wearing"], userinfo["enemieskilled"], userinfo["deaths"]), color=discord.Color.blue())
@@ -550,7 +550,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         choices = []
         inv_list = [i for i in userinfo["inventory"]]
@@ -576,7 +576,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         weapons_list = ["hp","Hp", "Precise sword", "Precise sword", "Precise bow", "Precise bow", "Precise dagger", "Precise dagger", "Precise staff", "Precise staff"]
         if ctx.invoked_subcommand is None:
@@ -644,8 +644,8 @@ class RPG:
                 await self.bot.say(embed=em)
 
         elif item == "Precise bow":
-            if not userinfo["class"] == "Archer":
-                em = discord.Embed(description="```diff\n- You need to be an Archer to buy this item.```", color=discord.Color.red())
+            if not userinfo["class"] == "Ranger":
+                em = discord.Embed(description="```diff\n- You need to be an Ranger to buy this item.```", color=discord.Color.red())
                 await self.bot.say(embed=em)
                 return
             cost = 1000
@@ -694,8 +694,8 @@ class RPG:
         elif Class == "Thief" or Class == "thief":
             em = discord.Embed(description="```diff\n+ Item list for the Thief Class.```\n\n1) Precise Dagger - [1,000 Gold]", color=discord.Color.blue())
             await self.bot.say(embed=em)
-        elif Class == "Archer" or Class == "archer":
-            em = discord.Embed(description="```diff\n+ Item list for the Archer Class.```\n\n1) Precise Bow - [1,000 Gold]", color=discord.Color.blue())
+        elif Class == "Ranger" or Class == "ranger":
+            em = discord.Embed(description="```diff\n+ Item list for the Ranger Class.```\n\n1) Precise Bow - [1,000 Gold]", color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
             em = discord.Embed(description="```diff\n- That is not a valid Class.```", color=discord.Color.red())
@@ -706,7 +706,7 @@ class RPG:
         user = ctx.message.author
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         if userinfo["hp_potions"] > 0:
             gain = random.randint(90, 100)
@@ -729,19 +729,19 @@ class RPG:
         goldget = random.randint(500, 1000)
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         curr_time = time.time()
         delta = float(curr_time) - float(userinfo["daily_block"])
 
         if delta >= 86400.0 and delta>0:
             if userinfo["class"] == "None" and userinfo["race"] == "None":
-                await self.bot.reply("Please start your player using `>start`")
+                await self.bot.reply("Please start your player using `!rpg menu`")
                 return
             userinfo["gold"] += goldget
             userinfo["daily_block"] = curr_time
             fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-            em = discord.Embed(description="```diff\n+ You recieved your daily gold!\n+ {}```".format(goldget), color=discord.Color.blue())
+            em = discord.Embed(description="```diff\n+ You received your daily gold!\n+ {}```".format(goldget), color=discord.Color.blue())
             await self.bot.say(embed=em)
         else:
             # calculate time left
@@ -758,14 +758,14 @@ class RPG:
         HPget = random.randint(10, 40)
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         curr_time = time.time()
         delta = float(curr_time) - float(userinfo["rest_block"])
 
         if delta >= 120.0 and delta>0:
             if userinfo["class"] == "None" and userinfo["race"] == "None":
-                await self.bot.reply("Please start your player using `>start`")
+                await self.bot.reply("Please start your player using `!rpg menu`")
                 return
             userinfo["health"] = userinfo["health"] + HPget
             if userinfo["health"] > 100:
@@ -790,14 +790,14 @@ class RPG:
         mined_rock = random.randint(1, 10)
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         curr_time = time.time()
         delta = float(curr_time) - float(userinfo["mine_block"])
 
         if delta >= 600.0 and delta>0:
             if userinfo["class"] == "None" and userinfo["race"] == "None":
-                await self.bot.reply("Please start your player using `/start`")
+                await self.bot.reply("Please start your player using `!rpg menu`")
                 return
             userinfo["metal"] = userinfo["metal"] + mined_metal
             userinfo["stone"] = userinfo["stone"] + mined_rock
@@ -820,14 +820,14 @@ class RPG:
         chopped = random.randint(1, 10)
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
         if userinfo["race"] and userinfo["class"] == "None":
-            await self.bot.say("Please start your character using `>start`")
+            await self.bot.say("Please start your character using `!rpg menu`")
             return
         curr_time = time.time()
         delta = float(curr_time) - float(userinfo["chop_block"])
 
         if delta >= 600.0 and delta>0:
             if userinfo["class"] == "None" and userinfo["race"] == "None":
-                await self.bot.reply("Please start your player using `/start`")
+                await self.bot.reply("Please start your player using `!rpg menu`")
                 return
             userinfo["wood"] = userinfo["wood"] + chopped
             userinfo["chop_block"] = curr_time
@@ -909,7 +909,10 @@ class RPG:
                 "in_dungeon": "False",
                 "dungeon_enemy": "None",
                 "duneon_enemy_hp": 0,
-                "in_party": []
+                "in_party": [],
+				"thirst": 0,
+				"hunger": 0,
+				"tiredness": 0
             }
             fileIO("data/rpg/players/{}/info.json".format(user.id), "save", new_account)
         userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
