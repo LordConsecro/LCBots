@@ -54,11 +54,6 @@ class RPG:
             return await self.check_answer(ctx, valid_options)
         
 
-    async def on_message(self, message):
-        if message.content.startswith('!rpg'):
-            await self.bot.delete_message(message)
-        await self.bot.process_commands(message)
-
     #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
@@ -850,7 +845,6 @@ class RPG:
             em = discord.Embed(description="```diff\n- You cannot chop yet!\n\n- Time left:\n- {} Hours, {} Minutes, and {} Seconds```".format(int(h), int(m), int(s)), color=discord.Color.red())
             await self.bot.say(embed=em)
 
-
     def _name(self, user, max_length):
         if user.name == user.display_name:
             return user.name
@@ -858,6 +852,8 @@ class RPG:
             return "{} ({})".format(user.name, self._truncate_text(user.display_name, max_length - len(user.name) - 3), max_length)
 
     async def on_message(self, message):
+        if message.content.startswith('!rpg'):
+            await self.bot.delete_message(message)
         await self._handle_on_message(message)
 
     async def _handle_on_message(self, message):
