@@ -55,7 +55,7 @@ class RPG:
     #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
-		user = ctx.message.author
+        user = ctx.message.author
         if ctx.invoked_subcommand is None:
             #we need more of an into here
             intro = []
