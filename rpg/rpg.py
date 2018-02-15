@@ -52,19 +52,19 @@ class RPG:
         else:
             return await self.check_answer(ctx, valid_options)
 
-	#this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
+    #this is your actual command, and where you would put aliases and stuff, the @command.group lets the script know this is the MAIN command
     @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
-			#we need more of an into here
-			intro = "What command would you like to do?\n"
-			intro += "!rpg start - starts or resets game\n"
-			
+            #we need more of an into here
+            intro = "What command would you like to do?\n"
+            intro += "!rpg start - starts or resets game\n"
+            
             await self.bot.say(intro)
-			
+            
             return
            
-	#see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
+    #see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
     @rpg.command (pass_context = True)
     async def start(self, ctx):
         channel = ctx.message.channel
@@ -107,9 +107,9 @@ class RPG:
                 userinfo["chop_block"] = 0
                 userinfo["mine_block"] = 0
                 userinfo["in_party"] = []
-				userinfo["thirst"] = 0
-				userinfo["hunger"] = 0
-				userinfo["tiredness"] = 0
+                userinfo["thirst"] = 0
+                userinfo["hunger"] = 0
+                userinfo["tiredness"] = 0
                 fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
                 await self.bot.say("{}, you have been reset! Please use `!rpg start` again.".format(userinfo["name"]))
                 return
