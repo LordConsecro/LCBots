@@ -58,8 +58,10 @@ class RPG:
         if ctx.invoked_subcommand is None:
             user = ctx.message.author
             #we need more of an into here
-            intro = ("Welcome <@{}>\n".format(user.id))
+            intro = "\n"
+            intro += ("Welcome <@{}>\n".format(user.id))
             intro += "!rpg start - starts or resets game\n"
+            intro = "\n"
             
             await self.bot.say(intro)
             return
