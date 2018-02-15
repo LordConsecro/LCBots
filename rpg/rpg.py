@@ -56,122 +56,121 @@ class RPG:
     @commands.group(pass_context = True, aliases=["RPG", "R"])
     async def rpg(self, ctx):
         if ctx.invoked_subcommand is None:
+            channel = ctx.message.channel
+            server = channel.server
             user = ctx.message.author
-            #we need more of an into here
-            intro = "\n"
-            intro += ("Welcome <@{}>\n".format(user.id))
-            intro += "!rpg start - starts or resets game\n"
-            intro += "\n"
             
-            await self.bot.say(intro)
-            return
-           
-    #see how we use the above rpg for our @ now. this tells the system its a sub command of rpg
-    @rpg.command (pass_context = True)
-    async def start(self, ctx):
-        channel = ctx.message.channel
-        server = channel.server
-        user = ctx.message.author
-        await self._create_user(user, server)
-        userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
+            #we need more of an into here
+            intro_list.append("1: Start Adventure")
+            intro_list.append("2: Reset Character")
+            
+            em = discord.Embed(description="<@{}> ```diff\n+ Welcome to LC Dungeons!\n\n- Choose an option\n+ {}```".format(user.id, "\n+".join(intro_list)), color=discord.Color.blue())
+            await self.bot.say(embed=em)
+            answer0 = await self.check_answer(ctx, ["1", "2", "!rpg"])
 
-        if not userinfo["class"] == "None" and not userinfo["race"] == "None":
-            await self.bot.reply("Would you like to restart?")
-            answer1 = await self.check_answer(ctx, ["yes", "no", "n", "y", "!rpg start"])
-
-            if answer1 == "!rpg start":
-                pass
-            elif answer1 == "y" or answer1 == "Y" or answer1 == "yes" or answer1 == "Yes":
-                userinfo["gold"] = 0
-                userinfo["race"] = "None"
-                userinfo["class"] = "None"
-                userinfo["enemieskilled"] = 0
-                userinfo["equip"] = "None"
-                userinfo["inventory"] = []
-                userinfo["health"] = 100
-                userinfo["deaths"] = 0
-                userinfo["hp_potions"] = 0
-                userinfo["inguild"] = "None"
-                userinfo["guildhash"] = 0
-                userinfo["lootbag"] = 0
-                userinfo["name"] = user.name
-                userinfo["location"] = "Golden Temple"
-                userinfo["selected_enemy"] = "None"
-                userinfo["daily_block"] = 0
-                userinfo["rest_block"] = 0
-                userinfo["in_dungeon"] = "False"
-                userinfo["duneon_enemy_hp"] = 0
-                userinfo["dungeon_enemy"] = "None"
-                userinfo["wearing"] = "None"
-                userinfo["keys"] = 0
-                userinfo["roaming"] = "False"
-                userinfo["lvl"] = 0
-                userinfo["chop_block"] = 0
-                userinfo["mine_block"] = 0
-                userinfo["in_party"] = []
-                userinfo["thirst"] = 0
-                userinfo["hunger"] = 0
-                userinfo["tiredness"] = 0
-                fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-                await self.bot.say("{}, you have been reset! Please use `!rpg start` again.".format(userinfo["name"]))
+            if answer0 == "!rpg":
                 return
-            elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
-                await self.bot.say("Okay then")
-                return
+                
+            elif answer1 == "1" or answer1 == "2":
+            
+                await self._create_user(user, server)
+                userinfo = fileIO("data/rpg/players/{}/info.json".format(user.id), "load")
 
-        await self.bot.say("Hello {}".format(user.name))
-        await asyncio.sleep(2)
-        await self.bot.say("Welcome to LC Dungeons!\n\nMay I ask what race you are?\n`Choose one`\nOrc\nHuman\nElf")
+                if not userinfo["class"] == "None" and not userinfo["race"] == "None":
+                    await self.bot.reply("Are you sure you want to restart?")
+                    answer1 = await self.check_answer(ctx, ["yes", "no", "n", "y", "!rpg start"])
 
-        answer1 = await self.check_answer(ctx, ["orc", "human", "elf", "!rpg start"])
+                    if answer1 == "!rpg start":
+                        pass
+                    elif answer1 == "y" or answer1 == "Y" or answer1 == "yes" or answer1 == "Yes":
+                        userinfo["gold"] = 0
+                        userinfo["race"] = "None"
+                        userinfo["class"] = "None"
+                        userinfo["enemieskilled"] = 0
+                        userinfo["equip"] = "None"
+                        userinfo["inventory"] = []
+                        userinfo["health"] = 100
+                        userinfo["deaths"] = 0
+                        userinfo["hp_potions"] = 0
+                        userinfo["inguild"] = "None"
+                        userinfo["guildhash"] = 0
+                        userinfo["lootbag"] = 0
+                        userinfo["name"] = user.name
+                        userinfo["location"] = "Golden Temple"
+                        userinfo["selected_enemy"] = "None"
+                        userinfo["daily_block"] = 0
+                        userinfo["rest_block"] = 0
+                        userinfo["in_dungeon"] = "False"
+                        userinfo["duneon_enemy_hp"] = 0
+                        userinfo["dungeon_enemy"] = "None"
+                        userinfo["wearing"] = "None"
+                        userinfo["keys"] = 0
+                        userinfo["roaming"] = "False"
+                        userinfo["lvl"] = 0
+                        userinfo["chop_block"] = 0
+                        userinfo["mine_block"] = 0
+                        userinfo["in_party"] = []
+                        userinfo["thirst"] = 0
+                        userinfo["hunger"] = 0
+                        userinfo["tiredness"] = 0
+                        fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                        await self.bot.say("{}, you have been reset! Please use `!rpg` again.".format(userinfo["name"]))
+                        return
+                    elif answer1 == "n" or answer1 == "N" or answer1 == "no" or answer1 == "No":
+                        await self.bot.say("No reset done")
+                        return
 
-        if answer1 == "!rpg start":
-            pass
-        elif answer1 == "orc" or answer1 == "Orc":
-            userinfo["race"] = "Orc"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-        elif answer1 == "human" or answer1 == "Human":
-            userinfo["race"] = "Human"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-        elif answer1 == "elf" or answer1 == "Elf":
-            userinfo["race"] = "Elf"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                await self.bot.say("Welcome to LC Dungeons {}!\n\nMay I ask what race you are?\n`Choose one`\nOrc\nHuman\nElf".format(user.name))
 
-        await self.bot.reply("Great!\nWhat Class are you?\n`Choose one`\nArcher\nPaladin\nMage\nThief")
+                answer1 = await self.check_answer(ctx, ["orc", "human", "elf", "!rpg"])
 
-        answer2 = await self.check_answer(ctx, ["archer", "paladin", "mage", "thief", "!rpg start"])
+                if answer1 == "!rpg":
+                    pass
+                elif answer1 == "orc" or answer1 == "Orc":
+                    userinfo["race"] = "Orc"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                elif answer1 == "human" or answer1 == "Human":
+                    userinfo["race"] = "Human"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                elif answer1 == "elf" or answer1 == "Elf":
+                    userinfo["race"] = "Elf"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
 
-        if answer2 == "!rpg start":
-            return
+                await self.bot.reply("Great!\nWhat Class are you?\n`Choose one`\nArcher\nPaladin\nMage\nThief")
 
-        elif answer2 == "archer" or answer2 == "Archer":
-            userinfo["class"] = "Archer"
-            userinfo["skills_learned"].append("Shoot")
-            userinfo["equip"] = "Simple Bow"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-            await self.bot.say("Great, enjoy your stay!")
-            return
-        elif answer2 == "paladin" or answer2 == "Paladin":
-            userinfo["class"] = "Paladin"
-            userinfo["skills_learned"].append("Swing")
-            userinfo["equip"] = "Simple Sword"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-            await self.bot.say("Great, enjoy your stay!")
-            return
-        elif answer2 == "mage" or answer2 == "Mage":
-            userinfo["class"] = "Mage"
-            userinfo["skills_learned"].append("Cast")
-            userinfo["equip"] = "Simple Staff"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-            await self.bot.say("Great, enjoy your stay!")
-            return
-        elif answer2 == "thief" or answer2 == "Thief":
-            userinfo["class"] = "Thief"
-            userinfo["skills_learned"].append("Stab")
-            userinfo["equip"] = "Simple Dagger"
-            fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
-            await self.bot.say("Great, enjoy your stay!")
-            return
+                answer2 = await self.check_answer(ctx, ["archer", "paladin", "mage", "thief", "!rpg start"])
+
+                if answer2 == "!rpg start":
+                    return
+
+                elif answer2 == "archer" or answer2 == "Archer":
+                    userinfo["class"] = "Archer"
+                    userinfo["skills_learned"].append("Shoot")
+                    userinfo["equip"] = "Simple Bow"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                    await self.bot.say("Great, enjoy your stay!")
+                    return
+                elif answer2 == "paladin" or answer2 == "Paladin":
+                    userinfo["class"] = "Paladin"
+                    userinfo["skills_learned"].append("Swing")
+                    userinfo["equip"] = "Simple Sword"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                    await self.bot.say("Great, enjoy your stay!")
+                    return
+                elif answer2 == "mage" or answer2 == "Mage":
+                    userinfo["class"] = "Mage"
+                    userinfo["skills_learned"].append("Cast")
+                    userinfo["equip"] = "Simple Staff"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                    await self.bot.say("Great, enjoy your stay!")
+                    return
+                elif answer2 == "thief" or answer2 == "Thief":
+                    userinfo["class"] = "Thief"
+                    userinfo["skills_learned"].append("Stab")
+                    userinfo["equip"] = "Simple Dagger"
+                    fileIO("data/rpg/players/{}/info.json".format(user.id), "save", userinfo)
+                    await self.bot.say("Great, enjoy your stay!")
+                    return
 
     @rpg.command(pass_context = True)
     async def fight(self, ctx):
@@ -297,7 +296,7 @@ class RPG:
 
         #YOUR SKILL OPTIONS LIST
         show_list = []
-        options = [">fight"]
+        options = ["!rpg fight"]
         if "Swing" in userinfo["skills_learned"]:
             options.append("swing")
             options.append("Swing")
